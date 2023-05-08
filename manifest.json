@@ -1,0 +1,14 @@
+{
+    "name": "Date Selector Google Search Console",
+    "version": "1.0",
+    "description": "Easily compare periods in Google Search Console",
+    "manifest_version": 3,
+    "permissions": [
+        "activeTab",
+        "scripting"
+    ],
+    "action": {
+        "default_icon": "logo.png",
+        "default_popup": "popup.html"
+    }
+}  

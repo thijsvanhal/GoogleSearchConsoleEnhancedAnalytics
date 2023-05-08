@@ -1,0 +1,50 @@
+@font-face {
+    font-family: madaregular;
+    src: url(/font/mada-regular-webfont.woff2) format('woff2'), url(/font/mada-regular-webfont.woff) format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: madabold;
+    src: url(/font/mada-bold-webfont.woff2) format('woff2'), url(/font/mada-bold-webfont.woff) format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+html {
+    padding: 20px;
+    height: auto;
+    width: 350px;
+}
+
+body {
+    font-family: madaregular;
+    background-color: #f0edcc;
+}
+h1 {
+    text-align: center;
+    font-size: 24px;
+    font-family: madabold;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: #02343f;
+}
+.btn {
+    font-family: madabold;
+    color:#f0edcc !important;
+    background-color: #02343f;
+    border-color: #031c22;
+    border-width: 0px !important;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    --bs-btn-hover-color:#f0edcc;
+    --bs-btn-hover-bg: #031c22;
+    --bs-btn-hover-border-color: #02343f;
+    --bs-btn-active-color:#f0edcc;
+    --bs-btn-active-bg: #031c22;
+    --bs-btn-active-border-color: #02343f;
+    width: 100%;
+    height: 30px;
+}
