@@ -21,8 +21,10 @@ let firstDayOfLastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1)
 let lastDayOfLastMonth = new Date(today.getFullYear(), today.getMonth(), 0);
 let firstDayOfPreviousMonth = new Date(today.getFullYear(), today.getMonth() - 2, 1);
 let lastDayOfPreviousMonth = new Date(today.getFullYear(), today.getMonth() - 1, 0);
-let firstDayOfPreviousYear = new Date(today.getFullYear() - 1, 3, 1);
-let lastDayOfPreviousYear = new Date(today.getFullYear() - 1, 3, 30);
+let firstDayOfPreviousYear = new Date(firstDayOfLastMonth);
+firstDayOfPreviousYear.setFullYear(firstDayOfPreviousYear.getFullYear() - 1);
+let lastDayOfPreviousYear = new Date(lastDayOfLastMonth);
+lastDayOfPreviousYear.setFullYear(lastDayOfPreviousYear.getFullYear() - 1);
 
 let startDate = formatDate(firstDayOfLastMonth);
 let endDate = formatDate(lastDayOfLastMonth);
