@@ -6,8 +6,32 @@
     <body>
         <h1>Google Search Console <br> Date Selector</h1>
         <button type="button" class="btn btn-primary" id="last-month-btn">Last Month</button>
-        <button type="button" class="btn btn-primary" id="last-month-compared-to-previous-month-btn">Last Month Compared to Previous Month</button>
-        <button type="button" class="btn btn-primary" id="last-month-compared-to-last-year-btn">Last Month Compared to Last Year</button>
+        <button type="button" class="btn btn-primary" id="last-month-compared-to-previous-month-btn">Last Month Compared To Previous Month</button>
+        <button type="button" class="btn btn-primary" id="last-month-compared-to-last-year-btn">Last Month Compared To Last Year</button>
+        <h2>Generate Custom Comparison</h2>
+        <div class="date-selection">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="previous" checked="">
+                <label class="form-check-label" for="previous">
+                    Previous Period
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="year">
+                <label class="form-check-label" for="year">
+                    Previous Year
+                </label>
+            </div>
+        </div>
+        <div class="date-selection">
+            <label for="startDate">What is the start date?</label>
+            <input id="startDate" class="form-control" type="date">
+        </div>
+        <div class="date-selection">
+            <label for="endDate">What is the end date?</label>
+            <input id="endDate" class="form-control" type="date">
+        </div>
+        <button type="button" class="btn btn-primary" id="compare">Compare</button>
         <script src="popup.js"></script>
     </body>
 </html>
