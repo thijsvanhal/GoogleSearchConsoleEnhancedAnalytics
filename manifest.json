@@ -1,6 +1,6 @@
 {
-    "name": "Date Selector Google Search Console",
-    "version": "1.2",
+    "name": "Google Search Console Date Selector",
+    "version": "1.3",
     "description": "Easily compare periods in Google Search Console",
     "manifest_version": 3,
     "permissions": [
@@ -8,7 +8,16 @@
         "scripting"
     ],
     "action": {
-        "default_icon": "logo.png",
-        "default_popup": "popup.html"
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "favicon16.png",
+            "32": "favicon32.png"
+        }
+    },
+    "icons": {
+        "16": "favicon16.png",
+        "32": "favicon32.png",
+        "48": "icon48.png",
+        "128": "icon128.png"
     }
 }  
