@@ -30,6 +30,16 @@ firstDayOfPreviousYear.setFullYear(firstDayOfPreviousYear.getFullYear() - 1);
 let lastDayOfPreviousYear = new Date(lastDayOfLastMonth);
 lastDayOfPreviousYear.setFullYear(lastDayOfPreviousYear.getFullYear() - 1);
 
+// Datum selecties
+var beginDate = new Date(today.getFullYear(), today.getMonth() - 16, today.getDate());
+var beginDateString = beginDate.toISOString().split("T")[0];
+document.getElementById("startDate").setAttribute("min", beginDateString);
+
+var yesterday = new Date(today);
+yesterday.setDate(today.getDate() - 1);
+var yesterdayString = yesterday.toISOString().split("T")[0];
+document.getElementById("endDate").setAttribute("max", yesterdayString);
+
 let startDate = formatDate(firstDayOfLastMonth);
 let endDate = formatDate(lastDayOfLastMonth);
 let startCompareDate = formatDate(firstDayOfPreviousMonth);
