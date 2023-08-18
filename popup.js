@@ -97,7 +97,6 @@ function customSelection() {
     const previousEndDateFormat = formatDate(previousEndDate);
     const yearStartDateFormat = formatDate(yearStartDate);
     const yearEndDateFormat = formatDate(yearEndDate);
-    console.log(yearStartDateFormat, yearEndDateFormat);
     if (document.getElementById('previous').checked == true) {
         addParametersToUrl({start_date: startDateFormat, end_date: endDateFormat, compare_start_date: previousStartDateFormat, compare_end_date: previousEndDateFormat});
     } else {
@@ -115,4 +114,13 @@ compareButton.addEventListener("click", async() => {
         files: ['/popup.js'],
         func: customSelection(startDateInput, endDateInput),
     })
+});
+
+const changes = document.getElementById('changes-text');
+changes.addEventListener("click", async () => {
+    let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        files: ['/statistieken.js']
+    });
 });

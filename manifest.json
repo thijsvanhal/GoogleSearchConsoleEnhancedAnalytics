@@ -1,6 +1,6 @@
 {
     "name": "Google Search Console Date Selector",
-    "version": "1.4",
+    "version": "1.5",
     "description": "Easily compare periods in Google Search Console",
     "manifest_version": 3,
     "permissions": [

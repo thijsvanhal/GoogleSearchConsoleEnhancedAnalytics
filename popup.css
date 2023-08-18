@@ -24,7 +24,7 @@ body {
 }
 h1 {
     text-align: center;
-    font-size: 24px;
+    font-size: 20px;
     font-family: madabold;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -32,11 +32,21 @@ h1 {
 }
 h2 {
     text-align: left;
-    font-size: 20px;
+    font-size: 16px;
     font-family: madabold;
-    margin-top: 20px;
+    margin-top: 15px;
     margin-bottom: 0px;
     color: #02343f;
+}
+p {
+    font-size: 16px;
+    font-family: madaregular;
+    margin-bottom: 16px;
+    color: rgb(33, 37, 41);
+}
+#changes-text {
+    text-decoration: underline;
+    cursor: pointer;
 }
 label {
     font-size: 14px;
@@ -48,7 +58,7 @@ label {
     border-color: #031c22;
     border-width: 0px !important;
     margin-top: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     border-radius: 12px;
     --bs-btn-hover-color:#f0edcc;
     --bs-btn-hover-bg: #031c22;
