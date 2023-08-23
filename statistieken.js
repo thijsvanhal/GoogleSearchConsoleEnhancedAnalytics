@@ -71,7 +71,7 @@ function updateStatisticsPercentage(statElement, previousValue) {
             percentageElements[3].style.color = '#dd300b';
         } else if (percentage < 0) {
             percentageElement.style.color.remove;
-            percentageElements[3].style.color = '#409a15';
+            percentageElements[3].style.color = '#75FF33';
         }
     }
     
