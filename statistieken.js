@@ -34,8 +34,9 @@ function parseNumberWithComma(numberString) {
     if (normalizedNumberString.endsWith('K')) {
         normalizedNumberString = normalizedNumberString.replace('K', '');
         multiplier = 1000;
-    } else if (normalizedNumberString.endsWith('mln.')) {
-        normalizedNumberString = normalizedNumberString.replace('mln.', '');
+    } else if (normalizedNumberString.endsWith('mln.') || normalizedNumberString.endsWith('M')) {
+        normalizedNumberString = normalizedNumberString.replace('mln.', '').replace('M', '');
+        console.log(normalizedNumberString);
         multiplier = 1000000;
     }
 
