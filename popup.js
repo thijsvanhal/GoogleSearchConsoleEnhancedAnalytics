@@ -119,8 +119,16 @@ compareButton.addEventListener("click", async() => {
 const changes = document.getElementById('changes-text');
 changes.addEventListener("click", async () => {
     let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        files: ['/statistieken.js']
+    chrome.tabs.reload(tab.id);
+    chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo) {
+        if (tabId === tab.id && changeInfo.status === "complete") {
+            chrome.tabs.onUpdated.removeListener(listener);
+            chrome.scripting.executeScript({
+                target: { tabId: tab.id },
+                files: ['/statistieken.js'],
+            });
+        }
     });
 });
+
+
