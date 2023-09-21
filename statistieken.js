@@ -32,17 +32,19 @@ function processStatistics() {
 
 // Vergelijken van data
 function parseNumberWithComma(numberString) {
-    let normalizedNumberString = numberString.replace(',', '.').trim();
+    const normalizedNumberString = numberString.replace(',', '.').trim();
     let multiplier = 1;
 
-    if (normalizedNumberString.toLowerCase().endsWith('k')) {
-        normalizedNumberString = normalizedNumberString.replace('/k$/i', '');
-        multiplier = 1000;
-    } else if (normalizedNumberString.endsWith('mln.') || normalizedNumberString.endsWith('M')) {
-        normalizedNumberString = normalizedNumberString.replace('mln.', '').replace('M', '');
-        multiplier = 1000000;
+    switch (true) {
+        case /k|K|mil$/i.test(normalizedNumberString):
+            multiplier = 1000;
+            break;
+        case /mln\.|M|Mio\.$/i.test(normalizedNumberString):
+            multiplier = 1000000;
+            break;
     }
-    return parseFloat(normalizedNumberString) * multiplier;
+    const numericValue = parseFloat(normalizedNumberString.replace(/[a-zA-Z]+$/, ''));
+    return numericValue * multiplier;
 }
   
 function calculatePercentage(currentValue, previousValue) {
@@ -86,7 +88,6 @@ function tableChanges(selector) {
         if (selector === '.CC8hte' || selector === '.OCEh7') {
             var currentValue = parseFloat(changeElements[i].textContent.replace(/\D/g, ''));
             var previousValue = parseFloat(changeElements[i + 1].textContent.replace(/\D/g, ''));
-            console.log(currentValue, previousValue);
         } else {
             var currentValue = parseNumberWithComma(changeElements[i].innerText);
             var previousValue = parseNumberWithComma(changeElements[i + 1].innerText);
