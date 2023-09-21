@@ -35,8 +35,8 @@ function parseNumberWithComma(numberString) {
     let normalizedNumberString = numberString.replace(',', '.').trim();
     let multiplier = 1;
 
-    if (normalizedNumberString.endsWith('K')) {
-        normalizedNumberString = normalizedNumberString.replace('K', '');
+    if (normalizedNumberString.toLowerCase().endsWith('k')) {
+        normalizedNumberString = normalizedNumberString.replace('/k$/i', '');
         multiplier = 1000;
     } else if (normalizedNumberString.endsWith('mln.') || normalizedNumberString.endsWith('M')) {
         normalizedNumberString = normalizedNumberString.replace('mln.', '').replace('M', '');
@@ -84,8 +84,9 @@ function tableChanges(selector) {
 
     for (let i = 0; i < changeElements.length; i += 3) {
         if (selector === '.CC8hte' || selector === '.OCEh7') {
-            var currentValue = parseFloat(changeElements[i].innerText.replace('.', '').trim());
-            var previousValue = parseFloat(changeElements[i + 1].innerText.replace('.', '').trim());
+            var currentValue = parseFloat(changeElements[i].textContent.replace(/\D/g, ''));
+            var previousValue = parseFloat(changeElements[i + 1].textContent.replace(/\D/g, ''));
+            console.log(currentValue, previousValue);
         } else {
             var currentValue = parseNumberWithComma(changeElements[i].innerText);
             var previousValue = parseNumberWithComma(changeElements[i + 1].innerText);
