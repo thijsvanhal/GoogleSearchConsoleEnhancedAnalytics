@@ -1,7 +1,7 @@
 {
-    "name": "Google Search Console Date Selector",
-    "version": "1.6.1",
-    "description": "Easily compare periods in Google Search Console",
+    "name": "Google Search Console Date Selector & Percentage Changes Generator",
+    "version": "1.6.2",
+    "description": "Easily compare periods in Google Search Console and generate the percentage changes.",
     "manifest_version": 3,
     "permissions": [
         "activeTab",
