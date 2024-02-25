@@ -1,36 +1,132 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="popup.css"/>
+    <link rel="stylesheet" href="/files/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/files/css/popup.css"/>
   </head>
   <body>
-    <h1>Google Search Console Date Selector & Percentage Changes Generator</h1>
-    <button type="button" class="btn btn-primary" id="last-month-btn">Last Month</button>
-    <button type="button" class="btn btn-primary" id="last-month-compared-to-previous-month-btn">Last Month Compared To Previous Month</button>
-    <button type="button" class="btn btn-primary" id="last-month-compared-to-last-year-btn">Last Month Compared To Last Year</button>
-    <h2>Generate Custom Comparison</h2>
-    <div class="date-selection">
-      <div class="form-check">
+    <div class="container-lg" id="instellingen" style="display:none;">
+      <div class="row justify-content-end" style="padding-right: 12px;">
+        <button type="button" class="btn btn-primary" id="backButton" style="width: auto;">Close settings</button>
+      </div>
+      <h1>Settings</h1>
+      <span>This extension is BYOK based (bring your own key). To generate search volumes inside Google Search Console, an API e-mail and password is needed. Check out <a style="font-size: 14px;" href="">the documentation</a> for more info.</span>
+      <div class="row">
+        
+        <div class="col-sm">
+          <div class="custom-dropdown" id="location-dropdown">
+            <div class="form-floating">
+              <input type="text" placeholder="Zoek je gewenste locatie" class="form-control" id="search-location" data-np-intersection-state="visible" value="United Kingdom">
+              <label for="search-location">Location</label>
+            </div>
+            <ul class="dropdown-options" id="location-options">
+            </ul>
+          </div>
+        </div>
+        <div class="col-sm">
+          <div class="custom-dropdown" id="language-dropdown">
+            <div class="form-floating">
+              <input type="text" placeholder="Zoek je gewenste taal" class="form-control" id="search-language" data-np-intersection-state="visible" value="English">
+              <label for="search-language">Language</label>
+            </div>
+            <ul class="dropdown-options" id="language-options">
+            </ul>
+          </div>
+        </div>
+        <form>
+          <div class="form-floating">
+            <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+            <label for="inputEmail">DataForSEO e-mail</label>
+          </div>
+          <div class="form-floating">
+            <input type="password" class="form-control" id="inputAPI" placeholder="API Wachtwoord">
+            <label for="inputAPI">DataForSEO password</label>
+          </div>
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="rememberMe">
+            <label class="form-check-label" for="rememberMe" style="font-size: 14px;">Remember me (values are stored in your browser, not send to a server)</label>
+          </div>
+          <button type="button" class="btn btn-primary" id="loginButton">Save</button>
+          <button type="button" class="btn btn-primary secondbutton" id="deleteButton" style="display: none;">Log Out</button>
+        </form>
+      </div>
+    </div>
+    <div class="container-lg"> 
+      <div class="row">
+        <div class="col-sm">
+          <button type="button" class="btn btn-primary" id="last-month-btn" style="height: 54px;">Last Month</button>
+        </div>
+        <div class="col-sm">
+          <button type="button" class="btn btn-primary" id="last-month-compared-to-previous-month-btn">Last Month Compared To Previous Month</button>      
+        </div>
+        <div class="col-sm">
+          <button type="button" class="btn btn-primary" id="last-month-compared-to-last-year-btn">Last Month Compared To Last Year</button>
+        </div>
+      </div>
+    </div>
+    <div class="container-lg" id="blauwe-container">
+      <h2>Select Default Period Or Select Custom Period</h2>
+      <div class="row">
+        <div class="col-sm">
+          <form class="form-floating">
+            <select class="form-select" id="selecteer-periode">
+              <option value>Select period</option>
+              <option value="d-maand">This month</option>
+              <option value="a-maand">Last month</option>
+              <option value="d-kwartaal">This quarter</option>
+              <option value="a-kwartaal">Last quarter</option>
+              <option value="jaar">This year</option>
+            </select>
+            <label for="selecteer-periode">Default Period</label>
+          </form>
+        </div>
+        <div class="col-sm">
+          <form class="form-floating">
+            <input id="start-date" class="form-control" type="date" min="yyyy-mm-dd"/>  
+            <label for="start-date">Select start date</label>
+          </form>
+        </div>
+        <div class="col-sm">
+          <form class="form-floating">
+            <input id="end-date" class="form-control" type="date" max="yyyy-mm-dd"/>
+            <label for="end-date">Select end date</label>
+          </form>
+        </div>
+      </div>
+      <h2>Select Comparison Period</h2>
+      <div class="form-check form-check-inline">
         <input class="form-check-input" type="radio" name="flexRadioDefault" id="previous" checked=""/>
         <label class="form-check-label" for="previous"> Previous Period </label>
       </div>
-      <div class="form-check">
+      <div class="form-check form-check-inline">
         <input class="form-check-input" type="radio" name="flexRadioDefault" id="year"/>
         <label class="form-check-label" for="year"> Previous Year </label>
       </div>
+      <button type="button" class="btn btn-primary secondbutton" id="compare" style="margin-top: 1rem;">Compare</button>
     </div>
-    <div class="date-selection">
-      <label for="startDate">What is the start date?</label>
-      <input id="startDate" class="form-control" type="date" min="" />
+    <div class="container-lg">
+      <p id="warning"></p>
+      <div class="row">
+        <div class="col-sm">
+          <h2 style="display: inline-flex;">Generate percentage changes</h2>
+          <button type="button" class="btn btn-primary" id="generate-changes">Generate changes</button>      
+        </div>
+        <div class="col-sm">
+          <h2 style="display: inline-flex;">Generate search volumes</h2>
+          <a style="display: inline-flex;margin-left: 5px;" id="loginLink" href="#">Settings</a>
+          <button type="button" class="btn btn-primary" id="generate-search-volumes">Generate search volumes</button>      
+        </div>
+      </div>
     </div>
-    <div class="date-selection">
-      <label for="endDate">What is the end date?</label>
-      <input id="endDate" class="form-control" type="date" max="" />
+    <div class="container-lg" style="margin-top: 1rem;">
+      <div class="form-check form-switch form-check-inline">
+        <input class="form-check-input" type="checkbox" role="switch" id="keep-changes-alive">
+        <label class="form-check-label" for="keep-changes-alive" style="font-size: 14px;">Generate % changes in session</label>
+      </div>
+      <hr>
+      <p style="margin-top: 1rem;text-align:center;font-size: 12px;">Google Search Console Enhanced Analytics by <a href="https://thijsvanhal.nl/">Thijs van Hal</a> - See <a href="">changelog & documentation</a></p>
     </div>
-    <button type="button" class="btn btn-primary" id="compare">Compare</button>
-    <h2>Extra! Generate percentage changes</h2>
-    <p id="changes-text">Generate changes</p>
-    <script src="popup.js"></script>
-    <script src="statistieken.js"></script>
+    <script type="text/javascript" src="/files/js/bootstrap.min.js"></script>
+    <script src="/files/js/popup.js"></script>
   </body>
 </html>
