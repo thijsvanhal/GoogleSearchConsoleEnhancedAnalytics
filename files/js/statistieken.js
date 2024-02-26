@@ -12,6 +12,14 @@ async function checkCurrentPage() {
 }
 
 function processStatistics() {
+    let min;
+    const currentURL = window.location.href;
+    if (currentURL.includes('/search-console/performance/search-analytics')) {
+        min = 8;
+    } else {
+        min = 6;
+    }
+
     const percentageElements = document.querySelectorAll(".percentage");
     percentageElements.forEach(element => {
         element.remove();
@@ -21,16 +29,16 @@ function processStatistics() {
 
     statsElements.forEach((statElement, index) => {
         const statValue = parseNumberWithComma(statElement.innerText);
-        if (index >= statsElements.length - 8) {
+        if (index >= statsElements.length - min) {
             stats.push(statValue);
         }
     });
-  
+
     for (let i = 0; i < stats.length; i += 2) {
         const currentValue = stats[i];
         const previousValue = stats[i + 1];
         if (previousValue !== undefined) {
-            const percentageElementIndex = statsElements.length - 8 + i;
+            const percentageElementIndex = statsElements.length - min + i;
             const percentageElement = statsElements[percentageElementIndex].querySelector('.percentage');
             if (percentageElement) {
                 percentageElement.remove();

@@ -47,6 +47,12 @@ a {
     color: #02343f !important;
 }
 
+strong {
+    font-size: 14px;
+    font-family: madabold !important;
+    color: #02343f !important;
+}
+
 .btn {
     font-family: madabold;
     font-size: 14px;
