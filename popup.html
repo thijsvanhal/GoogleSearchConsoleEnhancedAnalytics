@@ -10,9 +10,8 @@
         <button type="button" class="btn btn-primary" id="backButton" style="width: auto;">Close</button>
       </div>
       <h1>API Settings</h1>
-      <span>This extension is BYOK based (bring your own key). To generate search volumes inside Google Search Console, an API e-mail and password from DataForSEO is needed. Check out <a style="font-size: 14px;" href="">the documentation</a> for more info. Each request of 1000 keywords <strong>costs $0.05</strong>.</span>
+      <span>This extension is BYOK based, an API e-mail and password from DataForSEO is needed. Each request of 1000 keywords <strong>costs $0.05</strong>. Check out <a style="font-size: 14px;" href="https://thijsvanhal.nl/projecten/google-search-console-enhanced-analytics/#search-volumes" target="_blank">the documentation</a> for more info.</span>
       <div class="row">
-        
         <div class="col-sm">
           <div class="custom-dropdown" id="location-dropdown">
             <div class="form-floating">
@@ -42,7 +41,7 @@
             <input type="password" class="form-control" id="inputAPI" placeholder="API Wachtwoord">
             <label for="inputAPI">DataForSEO password</label>
           </div>
-          <div class="mb-3 form-check">
+          <div class="mb-3 form-check" style="margin-top: 1rem;">
             <input type="checkbox" class="form-check-input" id="rememberMe">
             <label class="form-check-label" for="rememberMe" style="font-size: 14px;">Remember me (values are stored in your browser, not send to a server)</label>
           </div>
@@ -54,18 +53,18 @@
     <div class="container-lg"> 
       <div class="row">
         <div class="col-sm">
-          <button type="button" class="btn btn-primary" id="last-month-btn" style="height: 54px;">Last Month</button>
+          <button type="button" class="btn btn-primary" id="last-month-btn" style="height: 54px;">Last month</button>
         </div>
         <div class="col-sm">
-          <button type="button" class="btn btn-primary" id="last-month-compared-to-previous-month-btn">Last Month Compared To Previous Month</button>      
+          <button type="button" class="btn btn-primary" id="last-month-compared-to-previous-month-btn">Last month compared to previous month</button>      
         </div>
         <div class="col-sm">
-          <button type="button" class="btn btn-primary" id="last-month-compared-to-last-year-btn">Last Month Compared To Last Year</button>
+          <button type="button" class="btn btn-primary" id="last-month-compared-to-last-year-btn">Last month compared to last year</button>
         </div>
       </div>
     </div>
     <div class="container-lg" id="blauwe-container">
-      <h2>Select Default Period Or Select Custom Period</h2>
+      <h2>Select a default period or select a custom period</h2>
       <div class="row">
         <div class="col-sm">
           <form class="form-floating">
@@ -77,7 +76,7 @@
               <option value="a-kwartaal">Last quarter</option>
               <option value="jaar">This year</option>
             </select>
-            <label for="selecteer-periode">Default Period</label>
+            <label for="selecteer-periode">Default period</label>
           </form>
         </div>
         <div class="col-sm">
@@ -93,14 +92,14 @@
           </form>
         </div>
       </div>
-      <h2>Select Comparison Period</h2>
+      <h2>Select comparison period</h2>
       <div class="form-check form-check-inline">
         <input class="form-check-input" type="radio" name="flexRadioDefault" id="previous" checked=""/>
-        <label class="form-check-label" for="previous"> Previous Period </label>
+        <label class="form-check-label" for="previous" style="font-size: 14px;"> Previous period </label>
       </div>
       <div class="form-check form-check-inline">
         <input class="form-check-input" type="radio" name="flexRadioDefault" id="year"/>
-        <label class="form-check-label" for="year"> Previous Year </label>
+        <label class="form-check-label" for="year" style="font-size: 14px;"> Previous year </label>
       </div>
       <button type="button" class="btn btn-primary secondbutton" id="compare" style="margin-top: 1rem;">Compare</button>
     </div>
@@ -109,7 +108,7 @@
       <div class="row">
         <div class="col-sm">
           <h2 style="display: inline-flex;">Generate percentage changes</h2>
-          <button type="button" class="btn btn-primary" id="generate-changes">Generate changes</button>      
+          <button type="button" class="btn btn-primary" id="generate-changes">Generate percentage changes</button>      
         </div>
         <div class="col-sm">
           <h2 style="display: inline-flex;">Generate search volumes</h2>
@@ -118,13 +117,13 @@
         </div>
       </div>
     </div>
-    <div class="container-lg" style="margin-top: 1rem;">
+    <div class="container-lg" style="margin-top: 0.5rem;">
       <div class="form-check form-switch form-check-inline">
         <input class="form-check-input" type="checkbox" role="switch" id="keep-changes-alive">
         <label class="form-check-label" for="keep-changes-alive" style="font-size: 14px;">Generate % changes in session</label>
       </div>
       <hr>
-      <p style="margin-top: 1rem;text-align:center;font-size: 12px;">Google Search Console Enhanced Analytics by <a href="https://thijsvanhal.nl/" target="_blank">Thijs van Hal</a> - See <a href="" target="_blank">documentation & changelog</a></p>
+      <p style="margin-top: 1rem;text-align:center;font-size: 12px;">Google Search Console Enhanced Analytics by <a href="https://thijsvanhal.nl/" target="_blank">Thijs van Hal</a> - <a href="https://thijsvanhal.nl/projecten/google-search-console-enhanced-analytics/" target="_blank">documentation</a> - <a href="https://www.buymeacoffee.com/thijsvanhal" target="_blank">Buy me a coffee</a></p>
     </div>
     <script type="text/javascript" src="/files/js/bootstrap.min.js"></script>
     <script src="/files/js/popup.js"></script>

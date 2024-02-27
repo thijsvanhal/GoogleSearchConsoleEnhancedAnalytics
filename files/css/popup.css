@@ -56,22 +56,20 @@ strong {
 .btn {
     font-family: madabold;
     font-size: 14px;
-    color:#f0edcc !important;
+    color: #fff !important;
     background-color: #02343f;
-    border-color: #031c22;
-    border-width: 0px !important;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    border-color: #031c22 !important;
+    margin-top: 10px;
+    margin-bottom: 10px;
     border-radius: 12px;
-    --bs-btn-hover-color:#f0edcc;
+    --bs-btn-hover-color: #f0edcc;
     --bs-btn-hover-bg: #031c22;
     --bs-btn-hover-border-color: #02343f;
-    --bs-btn-active-color:#f0edcc;
+    --bs-btn-active-color: #f0edcc;
     --bs-btn-active-bg: #031c22;
     --bs-btn-active-border-color: #02343f;
     width: 100%;
 }
-
 .secondbutton {
     font-family: madabold;
     color: #02343f !important;
@@ -108,7 +106,6 @@ strong {
 .form-control {
     border: 2px solid #02343f;
     margin-top: 1rem;
-    margin-bottom: 1rem;
     border-radius: 1rem;
     background-clip: unset;
 }

@@ -52,6 +52,11 @@ async function getVolumes() {
     const statusElement = latestPage.querySelector('.XoFXcf');
     statusElement.innerHTML = "<p>Search volume data is being generated in the background. Do <b>not reload</b> the page!</p>";
 
+    const volumeElements = document.querySelectorAll(".searchvolume");
+    volumeElements.forEach(element => {
+        element.remove();
+    });
+
     mixedKeywordsArray = [];
     mixedKeywordsArray.push({
         mixedKeywords: [],
