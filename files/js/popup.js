@@ -353,7 +353,7 @@ deleteButton.onclick = function() {
 
 // Language & location
 let typingTimer;
-const Interval = 500;
+const Interval = 1000;
 document.getElementById("search-location").addEventListener("input", function() {
     clearTimeout(typingTimer);
     typingTimer = setTimeout(function() {
