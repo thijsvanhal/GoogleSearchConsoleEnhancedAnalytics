@@ -155,7 +155,6 @@ function customSelection() {
         let month = date.getMonth();
         let quarterMonth = (month - 2 + 12) % 12;
         let year = date.getFullYear();
-        console.log(quarterMonth);
         if (quarterMonth === 10 || quarterMonth === 11 || quarterMonth === 12) {
             year -= 1;
         }
@@ -193,7 +192,6 @@ function customSelection() {
         if (previousStartDate < beginDate) {
             warning_text.innerHTML = `Your comparison start date is before ${beginDateString} (max. start date in Google Search Console) , you will not see all your data.`;
         }
-        console.log(previousStartDate, previousEndDate);
         const previousStartDateFormat = formatDate(previousStartDate);
         const previousEndDateFormat = formatDate(previousEndDate);
         addParametersToUrl({start_date: startDateFormat, end_date: endDateFormat, compare_start_date: previousStartDateFormat, compare_end_date: previousEndDateFormat});
@@ -205,7 +203,6 @@ function customSelection() {
         }
         const yearStartDateFormat = formatDate(yearStartDate);
         const yearEndDateFormat = formatDate(yearEndDate);
-        console.log(yearStartDate, yearEndDate);
         addParametersToUrl({start_date: startDateFormat, end_date: endDateFormat, compare_start_date: yearStartDateFormat, compare_end_date: yearEndDateFormat});
     }
 }
@@ -363,16 +360,24 @@ document.getElementById("search-location").addEventListener("input", function() 
 
 async function fetchLocationData() {
     const searchInput = document.getElementById("search-location").value;
-    const locationResponse = await fetch ('/files/locations.json');
-    const locationData = await locationResponse.json();
-    const desiredCountries = [searchInput];
-    const filteredLocationEntries = locationData.filter(location => {
-        return desiredCountries.some(country => location.location_name.toLowerCase().includes(country.toLowerCase()));
-    });
-
-    const locationOptions = filteredLocationEntries.map(location => location.location_name);
     const locationDropdown = document.getElementById('location-dropdown');
-    createCustomDropdown(locationDropdown, 'location-options', 'search-location', locationOptions);
+    const OptionsElement = document.getElementById('location-options');
+    if(searchInput !== '') {
+        OptionsElement.innerHTML = '';
+        const locationResponse = await fetch ('/files/locations.json');
+        const locationData = await locationResponse.json();
+        const desiredCountries = [searchInput];
+        const filteredLocationEntries = locationData.filter(location => {
+            return desiredCountries.some(country => location.location_name.toLowerCase().includes(country.toLowerCase()));
+        });
+
+        const locationOptions = filteredLocationEntries.map(location => location.location_name);
+        createCustomDropdown(locationDropdown, 'location-options', 'search-location', locationOptions);
+    } else {
+        OptionsElement.innerHTML = '';
+        const locationOptions = [];
+        createCustomDropdown(locationDropdown, 'location-options', 'search-location', locationOptions);
+    }   
     
 }
 

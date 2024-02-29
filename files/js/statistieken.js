@@ -3,12 +3,16 @@ checkCurrentPage();
 async function checkCurrentPage() {
     let paginas = document.querySelectorAll('.zQTmif');
     let latestPagina = paginas[paginas.length - 1];
+    let currentURL = window.location.href;
     while (latestPagina && latestPagina.id !== '') {
         await new Promise(resolve => setTimeout(resolve, 1000));
         paginas = document.querySelectorAll('.zQTmif');
         latestPagina = paginas[paginas.length - 1];
+        currentURL = window.location.href;
     }
-    processStatistics();
+    if (currentURL.includes('compare_date')) {
+        processStatistics();
+    }
 }
 
 function processStatistics() {
