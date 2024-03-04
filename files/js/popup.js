@@ -343,8 +343,6 @@ deleteButton.onclick = function() {
     rememberme.checked = false;
     document.getElementById("inputEmail").value = '';
     document.getElementById("inputAPI").value = '';
-    document.getElementById("search-location").value = 'United Kingdom';
-    document.getElementById("search-language").value = 'English';
     instellingen.style = "display:none";
 };
 
