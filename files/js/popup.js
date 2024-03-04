@@ -445,8 +445,8 @@ function filterOptions(optionsId, filter) {
 // Search volumes
 const volumesButton = document.getElementById("generate-search-volumes");
 volumesButton.addEventListener("click", async() => {
-    if (!login) {
-        instellingen.style = "";
+    if (!login || !country) {
+        loginLink.onclick();
         return;
     }
     let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
