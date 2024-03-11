@@ -316,11 +316,13 @@ loginButton.onclick = function() {
     let language_value = document.getElementById("search-language").value;
 
     if (rememberme.checked) {
+        chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
         chrome.storage.local.set({ login: login_value });
         chrome.storage.local.set({ password: password_value });
         chrome.storage.local.set({ location: location_value });
         chrome.storage.local.set({ language: language_value });
     } else {
+        chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
         chrome.storage.session.set({ login: login_value });
         chrome.storage.session.set({ password: password_value });
         chrome.storage.session.set({ location: location_value });
