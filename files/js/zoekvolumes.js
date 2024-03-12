@@ -94,10 +94,10 @@ async function getVolumes() {
             }
         }
     }
-    statusElement.innerHTML = "";
 }
 
 async function SearchVolumeData(keywords, country, language) {
+    const statusElement = latestPage.querySelector('.XoFXcf');
     const numRequests = Math.ceil(keywords.length / 1000);
         
     for (let i = 0; i < numRequests; i++) {
@@ -122,14 +122,19 @@ async function SearchVolumeData(keywords, country, language) {
 
         // POST request
         const post_response = await fetch(post_url, { ...requestPostOptions, body: JSON.stringify(post_array) });
-        const post_result = await post_response.json();
-        console.log(post_result.tasks);
-        const status = post_result.tasks[0].status_code;
-        if (status === 20100) {
-            taskIds.push(post_result.tasks[0].id);
+        if (post_response.ok === false) {
+            statusElement.innerHTML = `<p>Oops! There has been an error when accessing DataForSEO: <b>${post_response.status} - ${post_response.statusText}</b></p>`;
+            return;
         } else {
-            const statusElement = latestPage.querySelector('.XoFXcf');
-            statusElement.innerHTML = `<p>Oops! There has been an error: <b>${post_result.tasks[0].status_message}</b></p>`;
+            const post_result = await post_response.json();
+            console.log(post_result.tasks);
+            const status = post_result.tasks[0].status_code;
+            if (status === 20100) {
+                taskIds.push(post_result.tasks[0].id);
+            } else {
+                statusElement.innerHTML = `<p>Oops! There has been an error: <b>${post_result.tasks[0].status_message}</b></p>`;
+                return;
+            }
         }
     }
     
@@ -152,9 +157,8 @@ async function SearchVolumeData(keywords, country, language) {
                     }
                 }
             }
-
-            
         }
+        statusElement.innerHTML = "";
     }
 }
 
