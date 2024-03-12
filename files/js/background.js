@@ -1,5 +1,5 @@
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
-    if (changeInfo.status === 'complete') {
+    if (changeInfo.status === 'complete' && new URL(tab.url).hostname === 'search.google.com') {
         chrome.storage.session.get(["changes"], async (result) => {
             if (result.changes === true) {
                 chrome.scripting.executeScript({

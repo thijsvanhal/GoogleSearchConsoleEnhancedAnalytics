@@ -9,9 +9,6 @@
         "storage",
         "tabs"
     ],
-    "host_permissions": [
-        "https://search.google.com/*"
-    ],
     "background": {
         "service_worker": "/files/js/background.js"
     },
