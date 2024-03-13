@@ -81,13 +81,13 @@
         </div>
         <div class="col-sm">
           <form class="form-floating">
-            <input id="start-date" class="form-control" type="date" min="yyyy-mm-dd"/>  
+            <input id="start-date" class="form-control" type="date" min="yyyy-mm-dd" value="2024-03-01"/>  
             <label for="start-date">Select start date</label>
           </form>
         </div>
         <div class="col-sm">
           <form class="form-floating">
-            <input id="end-date" class="form-control" type="date" max="yyyy-mm-dd"/>
+            <input id="end-date" class="form-control" type="date" max="yyyy-mm-dd" value="2024-03-03"/>
             <label for="end-date">Select end date</label>
           </form>
         </div>
@@ -118,9 +118,20 @@
       </div>
     </div>
     <div class="container-lg" style="margin-top: 0.5rem;">
-      <div class="form-check form-switch form-check-inline">
-        <input class="form-check-input" type="checkbox" role="switch" id="keep-changes-alive">
-        <label class="form-check-label" for="keep-changes-alive" style="font-size: 14px;">Generate % changes in session</label>
+      <h2>Session settings</h2>
+      <div class="row">
+        <div class="col-sm">
+          <div class="form-check form-switch form-check">
+            <input class="form-check-input" type="checkbox" role="switch" id="keep-changes-alive">
+            <label class="form-check-label" for="keep-changes-alive" style="font-size: 14px;">Generate % changes in session</label>
+          </div>
+        </div>
+        <div class="col-sm">
+          <div class="form-check form-switch form-check">
+            <input class="form-check-input" type="checkbox" role="switch" id="keep-dates-alive">
+            <label class="form-check-label" for="keep-changes-alive" style="font-size: 14px;">Keep date selection in session</label>
+          </div>
+        </div>
       </div>
       <hr>
       <p style="margin-top: 1rem;text-align:center;font-size: 12px;">Google Search Console Enhanced Analytics by <a href="https://thijsvanhal.nl/" target="_blank">Thijs</a> - <a href="https://thijsvanhal.nl/projecten/google-search-console-enhanced-analytics/" target="_blank">Documentation</a> - <a href="https://thijsvanhal.nl/contact-me/" target="_blank">Report a bug</a> - <a href="https://www.buymeacoffee.com/thijsvanhal" target="_blank">Buy me a coffee</a></p>

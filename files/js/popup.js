@@ -14,6 +14,12 @@ function addParametersToUrl(params) {
         }
         chrome.tabs.update(tab.id, {url: url.href});
     });
+
+    chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
+    chrome.storage.session.set({ startDate: params.start_date });
+    chrome.storage.session.set({ endDate: params.end_date });
+    chrome.storage.session.set({ compareStartDate: params.compare_start_date });
+    chrome.storage.session.set({ compareEndDate: params.compare_end_date });
 }
 
 // Standaard Datum selecties
@@ -134,6 +140,7 @@ function formatDate(date) {
 }
 
 function customSelection() {
+    console.log('started');
     const selectedValue = selecteerPeriode.value;
 
     const startDate = new Date(startDateInput.value);
@@ -212,7 +219,7 @@ compareButton.addEventListener("click", async() => {
     let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     chrome.scripting.executeScript({
         target: { tabId: tab.id },
-        files: ['/popup.js'],
+        files: ['/files/js/popup.js'],
         func: customSelection(),
     })
 });
@@ -224,7 +231,7 @@ changes.addEventListener("click", async () => {
     chrome.runtime.sendMessage({ action: "executeStatistieken", tabId: tab.id });
 });
 
-// Update checkbox
+// Update checkbox changes
 const generatePercentChangesCheckbox = document.getElementById('keep-changes-alive');
 chrome.storage.session.get(["changes"]).then((result) => {
     if (result.changes === true) {
@@ -240,7 +247,24 @@ generatePercentChangesCheckbox.addEventListener('click', function () {
     } else {
         chrome.storage.session.remove(["changes"]);
     }
-    
+});
+
+// Update checkbox dates
+const generateDatesCheckbox = document.getElementById('keep-dates-alive');
+chrome.storage.session.get(["dates"]).then((result) => {
+    if (result.dates === true) {
+        generateDatesCheckbox.checked = true;
+    }
+});
+
+generateDatesCheckbox.addEventListener('click', function () {
+    if (generateDatesCheckbox.checked) {
+        chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
+        chrome.storage.session.set({ dates: true });
+        generateDatesCheckbox.checked = true;
+    } else {
+        chrome.storage.session.remove(["dates"]);
+    }
 });
 
 // Login met DataForSEO
