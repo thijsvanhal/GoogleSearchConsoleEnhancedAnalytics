@@ -20,6 +20,7 @@ function addParametersToUrl(params) {
     chrome.storage.session.set({ endDate: params.end_date });
     chrome.storage.session.set({ compareStartDate: params.compare_start_date });
     chrome.storage.session.set({ compareEndDate: params.compare_end_date });
+    document.getElementById('keep-dates-alive').disabled = false;
 }
 
 // Standaard Datum selecties
@@ -140,7 +141,6 @@ function formatDate(date) {
 }
 
 function customSelection() {
-    console.log('started');
     const selectedValue = selecteerPeriode.value;
 
     const startDate = new Date(startDateInput.value);
@@ -254,6 +254,7 @@ const generateDatesCheckbox = document.getElementById('keep-dates-alive');
 chrome.storage.session.get(["dates"]).then((result) => {
     if (result.dates === true) {
         generateDatesCheckbox.checked = true;
+        generateDatesCheckbox.disabled = false;
     }
 });
 
@@ -478,3 +479,26 @@ volumesButton.addEventListener("click", async() => {
     let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     chrome.runtime.sendMessage({ action: "executeVolume", tabId: tab.id });
 });
+
+//Datepicker
+const picker = new easepick.create({
+    element: "#datepicker",
+    css: [
+        "/files/css/easypick.css"
+    ],
+    zIndex: 10,
+    grid: 1,
+    calendars: 1,
+    LockPlugin: {
+        maxDate: "2024-03-14T00:00:00.000Z"
+    },
+    PresetPlugin: {
+        position: "right",
+        customLabels: ['This month', 'Last month', 'This quarter', 'Last quarter', 'This year']
+    },
+    plugins: [
+        "RangePlugin",
+        "LockPlugin",
+        "PresetPlugin"
+    ]
+})

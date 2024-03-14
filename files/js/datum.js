@@ -23,15 +23,20 @@ async function getSessionData() {
 
 function addParametersToUrl(start_date, end_date, compare_start_date, compare_end_date) {
     var url = new URL(window.location.href);
-    url.searchParams.delete('start_date');
-    url.searchParams.delete('end_date');
-    url.searchParams.delete('compare_start_date');
-    url.searchParams.delete('compare_end_date');
-    url.searchParams.set('start_date', start_date);
-    url.searchParams.set('end_date', end_date);
-    if (compare_start_date && compare_end_date) {
-        url.searchParams.set('compare_start_date', compare_start_date);
-        url.searchParams.set('compare_end_date', compare_end_date);
+    var start = url.searchParams.get('start_date');
+    if (start === start_date) {
+        return;
+    } else {
+        url.searchParams.delete('start_date');
+        url.searchParams.delete('end_date');
+        url.searchParams.delete('compare_start_date');
+        url.searchParams.delete('compare_end_date');
+        url.searchParams.set('start_date', start_date);
+        url.searchParams.set('end_date', end_date);
+        if (compare_start_date && compare_end_date) {
+            url.searchParams.set('compare_start_date', compare_start_date);
+            url.searchParams.set('compare_end_date', compare_end_date);
+        }
+        chrome.runtime.sendMessage({action: "updateUrl", url: url.href});
     }
-    chrome.runtime.sendMessage({action: "updateUrl", url: url.href});
 }

@@ -66,6 +66,7 @@
     <div class="container-lg" id="blauwe-container">
       <h2>Select a default period or select a custom period</h2>
       <div class="row">
+        <input id="datepicker"/>
         <div class="col-sm">
           <form class="form-floating">
             <select class="form-select" id="selecteer-periode">
@@ -128,7 +129,7 @@
         </div>
         <div class="col-sm">
           <div class="form-check form-switch form-check">
-            <input class="form-check-input" type="checkbox" role="switch" id="keep-dates-alive">
+            <input class="form-check-input" type="checkbox" role="switch" id="keep-dates-alive" disabled>
             <label class="form-check-label" for="keep-changes-alive" style="font-size: 14px;">Keep date selection in session</label>
           </div>
         </div>
@@ -137,6 +138,7 @@
       <p style="margin-top: 1rem;text-align:center;font-size: 12px;">Google Search Console Enhanced Analytics by <a href="https://thijsvanhal.nl/" target="_blank">Thijs</a> - <a href="https://thijsvanhal.nl/projecten/google-search-console-enhanced-analytics/" target="_blank">Documentation</a> - <a href="https://thijsvanhal.nl/contact-me/" target="_blank">Report a bug</a> - <a href="https://www.buymeacoffee.com/thijsvanhal" target="_blank">Buy me a coffee</a></p>
     </div>
     <script type="text/javascript" src="/files/js/bootstrap.min.js"></script>
+    <script src="/files/js/easypick.js"></script>
     <script src="/files/js/popup.js"></script>
   </body>
 </html>
