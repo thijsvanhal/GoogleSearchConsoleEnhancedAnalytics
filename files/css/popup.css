@@ -36,7 +36,7 @@ h2 {
     margin-bottom: 0.5rem;
     color: #02343f;
 }
-p, span {
+p, span, input {
     font-size: 14px;
     font-family: madaregular;
     color: rgb(33, 37, 41);
@@ -138,7 +138,17 @@ strong {
     width: 100%;
     padding: 10px;
     border-radius: 0.7rem;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#02343f" viewBox="0 0 16 16"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z"/><path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5zM9 8a1 1 0 0 1 1-1h5v2h-5a1 1 0 0 1-1-1m-8 2h4a1 1 0 1 1 0 2H1z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+}
+
+#datepicker {
+    width: 100%;
+    padding: 10px;
+    border-radius: 0.7rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2302343f' class='bi bi-calendar-fill' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V5h16V4H0V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 0.75rem center;
     background-size: 16px 12px;
@@ -202,4 +212,17 @@ strong {
 .container-lg {
     padding-left: 0px;
     padding-right: 0px;
+}
+:host {
+    --color-fg-primary: #02343f;
+    --color-bg-secondary: #f2f2f2; 
+    --color-bg-inrange: #f2f2f2;
+}
+.calendar>.header button>svg {
+    fill: #02343f;
+}
+.month-name span {
+    font-size: 14px;
+    font-family: madabold;
+    color: rgb(33, 37, 41);
 }

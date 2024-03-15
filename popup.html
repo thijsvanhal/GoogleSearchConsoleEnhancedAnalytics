@@ -6,10 +6,10 @@
   </head>
   <body>
     <div class="container-lg" id="instellingen" style="display:none;">
-      <div class="row justify-content-end" style="padding-right: 12px;">
+      <h1 style="display: inline-flex;">API Settings</h1>
+      <div class="row" style="display: inline-flex; margin-left: 390px;">
         <button type="button" class="btn btn-primary" id="backButton" style="width: auto;">Close</button>
       </div>
-      <h1>API Settings</h1>
       <p>This extension is BYOK based, an API e-mail and password from DataForSEO is needed. Each request of 1000 keywords <strong>costs $0.05</strong>. Check out <a style="font-size: 14px;" href="https://thijsvanhal.nl/projecten/google-search-console-enhanced-analytics/#search-volumes" target="_blank">the documentation</a> for more info.</p>
       <div class="row">
         <div class="col-sm">
@@ -64,45 +64,23 @@
       </div>
     </div>
     <div class="container-lg" id="blauwe-container">
-      <h2>Select a default period or select a custom period</h2>
-      <div class="row">
-        <input id="datepicker"/>
-        <div class="col-sm">
-          <form class="form-floating">
-            <select class="form-select" id="selecteer-periode">
-              <option value>Select period</option>
-              <option value="d-maand">This month</option>
-              <option value="a-maand">Last month</option>
-              <option value="d-kwartaal">This quarter</option>
-              <option value="a-kwartaal">Last quarter</option>
-              <option value="jaar">This year</option>
-            </select>
-            <label for="selecteer-periode">Default period</label>
-          </form>
+      <h2>Select a period and comparison method</h2>
+      <div class="row" style="margin-top: 1rem; margin-bottom: 1rem;">
+        <div class="col-sm-5" style="display: flex;align-items: center;">
+          <input class="form-control" id="datepicker" value="Select period" style="margin-bottom: 0px;" />
         </div>
-        <div class="col-sm">
-          <form class="form-floating">
-            <input id="start-date" class="form-control" type="date" min="yyyy-mm-dd" value="2024-03-01"/>  
-            <label for="start-date">Select start date</label>
-          </form>
-        </div>
-        <div class="col-sm">
-          <form class="form-floating">
-            <input id="end-date" class="form-control" type="date" max="yyyy-mm-dd" value="2024-03-03"/>
-            <label for="end-date">Select end date</label>
-          </form>
+        <div class="col-sm" style="display: flex;justify-content: center;align-items: center;">
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="previous" checked=""/>
+            <label class="form-check-label" for="previous" style="font-size: 14px;"> Previous period </label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="year"/>
+            <label class="form-check-label" for="year" style="font-size: 14px;"> Previous year </label>
+          </div>
         </div>
       </div>
-      <h2>Select comparison period</h2>
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="flexRadioDefault" id="previous" checked=""/>
-        <label class="form-check-label" for="previous" style="font-size: 14px;"> Previous period </label>
-      </div>
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="flexRadioDefault" id="year"/>
-        <label class="form-check-label" for="year" style="font-size: 14px;"> Previous year </label>
-      </div>
-      <button type="button" class="btn btn-primary secondbutton" id="compare" style="margin-top: 1rem;">Compare</button>
+      <button type="button" class="btn btn-primary secondbutton" id="compare">Compare</button>
     </div>
     <div class="container-lg" style="margin-top: 1.5rem;">
       <p id="warning"></p>

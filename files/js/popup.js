@@ -31,17 +31,90 @@ const selecteerPeriode = document.getElementById('selecteer-periode');
 let today = new Date();
 const beginDate = new Date(today.getFullYear(), today.getMonth() - 16, today.getDate());
 const beginDateString = beginDate.toISOString().split("T")[0];
-startDateInput.setAttribute("min", beginDateString);
-endDateInput.setAttribute("min", beginDateString);
 
 let yesterday = new Date(today);
 yesterday.setDate(today.getDate() - 2);
 const yesterdayString = yesterday.toISOString().split("T")[0];
-startDateInput.setAttribute("max", yesterdayString);
-endDateInput.setAttribute("max", yesterdayString);
 
 const currentDate = new Date();
 currentDate.setDate(currentDate.getDate() - 1);
+
+//Datepicker
+const startDate = new Date(currentDate);
+const endDate = new Date();
+const currentQuarter = Math.floor(today.getMonth() / 3);;
+
+const dMaandStart = startDate.setDate(1);
+const dMaandEnd = endDate.setDate(today.getDate() - 2);
+
+const aMaandStart = startDate.setMonth(today.getMonth() - 1, 1);
+const aMaandEnd = endDate.setDate(0);
+
+const dKwartaalStart = startDate.setMonth(currentQuarter * 3, 1);
+const dKwartaalEnd = endDate.setDate(today.getDate() - 2);
+
+const lastQuarter = currentQuarter - 1;
+let lKwartaalStart;
+let lKwartaalEnd;
+if (lastQuarter === -1) {
+    lKwartaalStart = startDate.setFullYear(today.getFullYear() - 1, 9, 1);
+    lKwartaalEnd = endDate.setFullYear(today.getFullYear() - 1, 11, 31);
+} else {
+    lKwartaalStart = startDate.setFullYear(today.getFullYear(), lastQuarter * 3, 1);
+    lKwartaalEnd = endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 3, 0);
+}
+
+let dJaarStart = startDate.setMonth(0, 1);
+let dJaarEnd = endDate.setDate(today.getDate() - 2);
+
+let startDateSelection;
+let endDateSelection;
+
+const picker = new easepick.create({
+    element: "#datepicker",
+    css: [
+        "/files/css/easypick.css",
+        "files/css/popup.css"
+    ],
+    setup(picker) {
+        picker.on('select', (e) => {
+            console.log(e);
+            startDateSelection = e.detail.start;
+            endDateSelection = e.detail.end;
+        });
+    },
+    zIndex: 10,
+    LockPlugin: {
+        presets: false,
+        minDate: beginDateString,
+        maxDate: yesterdayString
+    },
+    PresetPlugin: {
+        position: "right",
+        customPreset: {
+            'This month': [new Date(dMaandStart), new Date(dMaandEnd)],
+            'Last month': [new Date(aMaandStart), new Date(aMaandEnd)],
+            'This quarter': [new Date(dKwartaalStart), new Date(dKwartaalEnd)],
+            'Last quarter': [new Date(lKwartaalStart), new Date(lKwartaalEnd)],
+            'This year': [new Date(dJaarStart), new Date(dJaarEnd)],
+        },
+        customLabels: ['This month', 'Last month', 'This quarter', 'Last quarter', 'This year']
+    },
+    plugins: [
+        "RangePlugin",
+        "LockPlugin",
+        "PresetPlugin"
+    ]
+})
+
+let keuze;
+const root = document.querySelector('.easepick-wrapper')
+const buttons = root.shadowRoot.querySelectorAll('.preset-plugin-container>button');
+buttons.forEach(button => {
+    button.addEventListener('click', function() {
+        keuze = button.innerText;
+    });
+});
 
 // Snelle selecties
 const lastMonth = document.getElementById("last-month-btn");
@@ -49,80 +122,28 @@ const lastMonthMoM = document.getElementById("last-month-compared-to-previous-mo
 const lastMonthYoY = document.getElementById("last-month-compared-to-last-year-btn");
 
 lastMonth.addEventListener("click", function() {
-    const startDate = new Date();
-    startDate.setMonth(today.getMonth() - 1, 1);
-    const endDate = new Date();
-    endDate.setDate(0);
-    const startDateFormat = formatDate(startDate);
-    const endDateFormat = formatDate(endDate);
+    const startDateFormat = formatDate(aMaandStart);
+    const endDateFormat = formatDate(aMaandEnd);
     addParametersToUrl({start_date: startDateFormat, end_date: endDateFormat});
 });
 
 lastMonthMoM.addEventListener("click", function() {
-    selecteerPeriode.value = 'a-maand';
+    startDateSelection = aMaandStart;
+    endDateSelection = aMaandEnd;
+    keuze = 'Last month';
     document.getElementById('previous').checked = true;
-    handleDate();
     customSelection();
 });
 
 lastMonthYoY.addEventListener("click", function() {
-    selecteerPeriode.value = 'a-maand';
+    startDateSelection = aMaandStart;
+    endDateSelection = aMaandEnd;
+    keuze = 'Last month';
     document.getElementById('year').checked = true;
-    handleDate();
     customSelection();
 });
 
-// Custom selecties
-selecteerPeriode.addEventListener('change', function () {
-    handleDate();
-});
-
 const warning_text = document.getElementById("warning");
-
-function handleDate() {
-    const selectedValue = selecteerPeriode.value;
-
-    let startDate = new Date(currentDate);
-    let endDate = new Date();
-    let currentQuarter = Math.floor(today.getMonth() / 3);;
-
-    switch (selectedValue) {
-        case 'd-maand':
-            if ((today.getDate() === 1 || today.getDate() === 2)) {
-                warning_text.innerHTML = "It takes time for Google Search Console to update data. Due to that reason it is currently not possible to get the data, try again the third day of this month.";
-                return;
-            };
-            startDate.setDate(1);
-            endDate.setDate(today.getDate() - 2);
-            break;
-        case 'a-maand':
-            startDate.setMonth(today.getMonth() - 1, 1);
-            endDate.setDate(0);
-            break;
-        case 'd-kwartaal':
-            startDate.setMonth(currentQuarter * 3, 1);
-            endDate.setDate(today.getDate() - 2);
-            break;
-        case 'a-kwartaal':
-            const lastQuarter = currentQuarter - 1;
-            if (lastQuarter === -1) {
-                startDate.setFullYear(today.getFullYear() - 1, 9, 1);
-                endDate.setFullYear(today.getFullYear() - 1, 11, 31);
-            } else {
-                startDate.setFullYear(today.getFullYear(), lastQuarter * 3, 1);
-                endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 3, 0);
-            }
-            break;
-        case 'jaar':
-            startDate.setMonth(0, 1);
-            endDate.setDate(today.getDate() - 2);
-            break;
-        default:
-            break;
-    }
-    startDateInput.value = formatDateForm(startDate);
-    endDateInput.value = formatDateForm(endDate);
-}
 
 // Format date for form
 function formatDateForm(date) {
@@ -141,12 +162,11 @@ function formatDate(date) {
 }
 
 function customSelection() {
-    const selectedValue = selecteerPeriode.value;
-
-    const startDate = new Date(startDateInput.value);
-    const endDate = new Date(endDateInput.value);
+    const startDate = new Date(startDateSelection);
+    const endDate = new Date(endDateSelection);
     const startDateFormat = formatDate(startDate);
     const endDateFormat = formatDate(endDate);
+    console.log(startDateFormat, endDateFormat);
 
     let previousStartDate, previousEndDate, yearStartDate, yearEndDate;
 
@@ -169,24 +189,24 @@ function customSelection() {
     }
 
     if (document.getElementById('previous').checked == true) {
-        switch (selectedValue) {
-            case 'd-maand':
+        switch (keuze) {
+            case 'This month':
                 previousStartDate = getPreviousMonth(startDate);
                 previousEndDate = getPreviousMonth(endDate);
                 break;
-            case 'a-maand':
+            case 'Last month':
                 previousStartDate = getPreviousMonth(startDate);
                 previousEndDate = new Date(startDate.getFullYear(), startDate.getMonth(), 0);
                 break;
-            case 'd-kwartaal':
+            case 'This quarter':
                 previousStartDate = getPreviousQuarter(startDate);
                 previousEndDate = getPreviousQuarter(endDate);
                 break;
-            case 'a-kwartaal':
+            case 'Last quarter':
                 previousStartDate = getPreviousQuarter(new Date(startDate.getFullYear(), startDate.getMonth(), 1));
                 previousEndDate = new Date(startDate.getFullYear(), startDate.getMonth(), 0);
                 break;
-            case 'jaar':
+            case 'This year':
                 previousStartDate = new Date(startDate.getFullYear() - 1, startDate.getMonth(), startDate.getDate());
                 previousEndDate = new Date(endDate.getFullYear() - 1, endDate.getMonth(), endDate.getDate());
                 break;
@@ -251,8 +271,20 @@ generatePercentChangesCheckbox.addEventListener('click', function () {
 
 // Update checkbox dates
 const generateDatesCheckbox = document.getElementById('keep-dates-alive');
-chrome.storage.session.get(["dates"]).then((result) => {
+chrome.storage.session.get(["dates"]).then(async (result) => {
     if (result.dates === true) {
+        const startDateString = await chrome.storage.session.get("startDate");
+        const endDateString = await chrome.storage.session.get("endDate");
+
+        const startDateYear = startDateString.startDate.slice(0, 4);
+        const startDateMonth = startDateString.startDate.slice(4, 6);
+        const startDateDay = startDateString.startDate.slice(6, 8);
+
+        const endDateYear = endDateString.endDate.slice(0, 4);
+        const endDateMonth = endDateString.endDate.slice(4, 6);
+        const endDateDay = endDateString.endDate.slice(6, 8);
+
+        document.getElementById('datepicker').value = `${startDateYear}-${startDateMonth}-${startDateDay} - ${endDateYear}-${endDateMonth}-${endDateDay}`;
         generateDatesCheckbox.checked = true;
         generateDatesCheckbox.disabled = false;
     }
@@ -479,26 +511,3 @@ volumesButton.addEventListener("click", async() => {
     let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     chrome.runtime.sendMessage({ action: "executeVolume", tabId: tab.id });
 });
-
-//Datepicker
-const picker = new easepick.create({
-    element: "#datepicker",
-    css: [
-        "/files/css/easypick.css"
-    ],
-    zIndex: 10,
-    grid: 1,
-    calendars: 1,
-    LockPlugin: {
-        maxDate: "2024-03-14T00:00:00.000Z"
-    },
-    PresetPlugin: {
-        position: "right",
-        customLabels: ['This month', 'Last month', 'This quarter', 'Last quarter', 'This year']
-    },
-    plugins: [
-        "RangePlugin",
-        "LockPlugin",
-        "PresetPlugin"
-    ]
-})
