@@ -41,7 +41,7 @@ currentDate.setDate(currentDate.getDate() - 1);
 
 //Datepicker
 const startDate = new Date(currentDate);
-const endDate = new Date();
+let endDate = new Date(today);
 const currentQuarter = Math.floor(today.getMonth() / 3);;
 
 const dMaandStart = startDate.setDate(1);
@@ -50,9 +50,11 @@ const dMaandEnd = endDate.setDate(today.getDate() - 2);
 const aMaandStart = startDate.setMonth(today.getMonth() - 1, 1);
 const aMaandEnd = endDate.setDate(0);
 
+endDate = new Date(today);
 const dKwartaalStart = startDate.setMonth(currentQuarter * 3, 1);
 const dKwartaalEnd = endDate.setDate(today.getDate() - 2);
 
+endDate = new Date(today);
 const lastQuarter = currentQuarter - 1;
 let lKwartaalStart;
 let lKwartaalEnd;
@@ -64,6 +66,7 @@ if (lastQuarter === -1) {
     lKwartaalEnd = endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 3, 0);
 }
 
+endDate = new Date(today);
 let dJaarStart = startDate.setMonth(0, 1);
 let dJaarEnd = endDate.setDate(today.getDate() - 2);
 

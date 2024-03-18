@@ -201,3 +201,33 @@ function isValidKeywordPhrase(phrase) {
 
     return true;
 }
+
+function isValidKeywordPhrase(phrase) {
+    const modifiedPhrase = phrase.replace(/(site:|search:)/g, '');
+
+    if (modifiedPhrase.length > 80) {
+        return false;
+    }
+
+    const invalidSymbolsRegex = /[,!@%^()={}~`<>?\\|―]/;
+    if (invalidSymbolsRegex.test(modifiedPhrase)) {
+        return false;
+    }
+
+    const fourByteUnicodeRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]|[\u{10000}-\u{10FFFF}]/u;
+    if (fourByteUnicodeRegex.test(modifiedPhrase)) {
+        return false;
+    }
+
+    const words = modifiedPhrase.split(/\s+/);
+    if (words.length > 10) {
+        return false;
+    }
+    for (const word of words) {
+        if (!/^(C\+\+)$/.test(word) && /[\.\-\+]/.test(word)) {
+            return false;
+        }
+    }
+
+    return true;
+}

@@ -94,6 +94,7 @@ strong {
     margin-bottom: 1.5rem;
     border-radius: 0.7rem;
     background-clip: unset;
+    font-size: 14px;
 }
 
 .form-select {
