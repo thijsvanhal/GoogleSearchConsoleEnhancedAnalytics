@@ -28,26 +28,27 @@ function processStatistics() {
     percentageElements.forEach(element => {
         element.remove();
     });
-    const statsElements = document.querySelectorAll('.CJvxcd');
+
     const stats = [];
 
+    const statsElements = document.querySelectorAll('.CJvxcd');
     statsElements.forEach((statElement, index) => {
-        const statValue = parseNumberWithComma(statElement.innerText);
+        const titleValue = statElement.getAttribute('title');
         if (index >= statsElements.length - min) {
-            stats.push(statValue);
+            stats.push(titleValue);
         }
     });
 
     for (let i = 0; i < stats.length; i += 2) {
-        const currentValue = stats[i];
-        const previousValue = stats[i + 1];
+        const currentValue = parseNumberWithComma(stats[i]);
+        const previousValue = parseNumberWithComma(stats[i + 1]);
         if (previousValue !== undefined) {
             const percentageElementIndex = statsElements.length - min + i;
             const percentageElement = statsElements[percentageElementIndex].querySelector('.percentage');
             if (percentageElement) {
                 percentageElement.remove();
             }
-            updateStatisticsPercentage(statsElements[percentageElementIndex], previousValue);
+            updateStatisticsPercentage(statsElements[percentageElementIndex], currentValue, previousValue);
         }
     }
     tableChanges('.CC8hte');
@@ -58,19 +59,9 @@ function processStatistics() {
 
 // Vergelijken van data
 function parseNumberWithComma(numberString) {
-    const normalizedNumberString = numberString.replace(',', '.').trim();
-    let multiplier = 1;
-
-    switch (true) {
-        case /k|K|mil$/i.test(normalizedNumberString):
-            multiplier = 1000;
-            break;
-        case /mln\.|M|Mio\.$/i.test(normalizedNumberString):
-            multiplier = 1000000;
-            break;
-    }
+    const normalizedNumberString = numberString.replace(/\./g, '').replace(',', '.').trim();
     const numericValue = parseFloat(normalizedNumberString.replace(/[a-zA-Z]+$/, ''));
-    return numericValue * multiplier;
+    return numericValue * 1;
 }
   
 function calculatePercentage(currentValue, previousValue) {
@@ -78,13 +69,12 @@ function calculatePercentage(currentValue, previousValue) {
     return ((diff / previousValue) * 100).toFixed(2);
 }
   
-function updateStatisticsPercentage(statElement, previousValue) {
-    const currentValue = parseNumberWithComma(statElement.innerText);
+function updateStatisticsPercentage(statElement, currentValue, previousValue) {
     const percentage = calculatePercentage(currentValue, previousValue);
-    
     const percentageElement = document.createElement('span');
     percentageElement.textContent = ` ${percentage}%`;
     percentageElement.className = 'percentage';
+    percentageElement.style.paddingLeft = '5px';
 
     statElement.parentNode.insertBefore(percentageElement, statElement.nextSibling);
 
@@ -134,6 +124,7 @@ function tableChanges(selector) {
                 const percentageChangeElement = document.createElement('span');
                 percentageChangeElement.textContent = ` ${percentageChange}%`;
                 percentageChangeElement.className = 'percentage';
+                percentageChangeElement.style.paddingLeft = '5px';
         
                 if (!changeElements[i + 2].querySelector('.percentage')) {
                     changeElements[i + 2].appendChild(percentageChangeElement);
