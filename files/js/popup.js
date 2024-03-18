@@ -21,6 +21,7 @@ function addParametersToUrl(params) {
     chrome.storage.session.set({ compareStartDate: params.compare_start_date });
     chrome.storage.session.set({ compareEndDate: params.compare_end_date });
     document.getElementById('keep-dates-alive').disabled = false;
+    keuze = '';
 }
 
 // Standaard Datum selecties
@@ -81,7 +82,6 @@ const picker = new easepick.create({
     ],
     setup(picker) {
         picker.on('select', (e) => {
-            console.log(e);
             startDateSelection = e.detail.start;
             endDateSelection = e.detail.end;
         });
@@ -169,7 +169,6 @@ function customSelection() {
     const endDate = new Date(endDateSelection);
     const startDateFormat = formatDate(startDate);
     const endDateFormat = formatDate(endDate);
-    console.log(startDateFormat, endDateFormat);
 
     let previousStartDate, previousEndDate, yearStartDate, yearEndDate;
 
