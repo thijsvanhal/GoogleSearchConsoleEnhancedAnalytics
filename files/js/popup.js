@@ -125,8 +125,8 @@ const lastMonthMoM = document.getElementById("last-month-compared-to-previous-mo
 const lastMonthYoY = document.getElementById("last-month-compared-to-last-year-btn");
 
 lastMonth.addEventListener("click", function() {
-    const startDateFormat = formatDate(aMaandStart);
-    const endDateFormat = formatDate(aMaandEnd);
+    const startDateFormat = formatDate(new Date(aMaandStart));
+    const endDateFormat = formatDate(new Date(aMaandEnd));
     addParametersToUrl({start_date: startDateFormat, end_date: endDateFormat});
 });
 
