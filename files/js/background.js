@@ -1,4 +1,5 @@
-function setupListeners() {    
+function setupListeners() {   
+    console.log("jaa");
     chrome.permissions.contains({
         permissions: ['webNavigation'],
     }, (result) => {
@@ -40,6 +41,7 @@ function setupListeners() {
             }, filter);
             
             chrome.webNavigation.onHistoryStateUpdated.addListener(async (details) => {
+                console.log("jaa");
                 let tabId = details.tabId;
                 chrome.storage.session.get(["changes"], async (result) => {
                     if (result.changes === true) {
