@@ -6,11 +6,23 @@
   </head>
   <body>
     <div class="container-lg" id="instellingen" style="display:none;">
-      <h1 style="display: inline-flex;">API Settings</h1>
-      <div class="row" style="display: inline-flex; margin-left: 390px;">
+      <h2 style="display: inline-flex;">Metric settings</h2>
+      <div class="row" style="display: inline-flex; margin-left: 395px;">
         <button type="button" class="btn btn-primary" id="backButton" style="width: auto;">Close</button>
       </div>
-      <p>This extension is BYOK based, an API e-mail and password from DataForSEO is needed. Each request of 1000 keywords <strong>costs $0.05</strong>. Check out <a style="font-size: 14px;" href="https://thijsvanhal.nl/projecten/google-search-console-enhanced-analytics/#search-volumes" target="_blank">the documentation</a> for more info.</p>
+      <p style="margin-bottom: 0.5rem;">How do you want the metrics above the chart to show up after comparison?</p>
+      <div style="display: inline-flex;align-items: center;margin-bottom: 1rem;">
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="rounded" checked>
+          <label class="form-check-label" for="rounded" style="font-size: 14px;"> Standard </label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="exact">
+          <label class="form-check-label" for="exact" style="font-size: 14px;"> Exact </label>
+        </div>
+      </div>
+      <h2>Search volume API settings</h2>
+      <p>This extension is BYOK based and uses DataForSEO. Each request of 1000 keywords <strong>costs $0.05</strong>. Check out <a style="font-size: 14px;" href="https://thijsvanhal.nl/projecten/google-search-console-enhanced-analytics/#search-volumes" target="_blank">the documentation</a> for more info.</p>
       <div class="row">
         <div class="col-sm">
           <div class="custom-dropdown" id="location-dropdown">
@@ -43,10 +55,13 @@
           </div>
           <div class="mb-3 form-check" style="margin-top: 1rem;">
             <input type="checkbox" class="form-check-input" id="rememberMe">
-            <label class="form-check-label" for="rememberMe" style="font-size: 14px;">Remember me (values are stored in your browser, not send to a server)</label>
+            <label class="form-check-label" for="rememberMe" style="font-size: 14px;">Store values in your browser (not send to a server)</label>
           </div>
-          <button type="button" class="btn btn-primary" id="loginButton">Save</button>
-          <button type="button" class="btn btn-primary secondbutton" id="deleteButton" style="display: none;">Delete data</button>
+          <div style="display: flex;">
+            <button type="button" class="btn btn-primary" id="loginButton" style="margin-right: 5px;">Save</button>
+            <button type="button" class="btn btn-primary secondbutton" id="deleteButton" style="display: none;">Delete data</button>
+          </div>
+          
         </form>
       </div>
     </div>
@@ -86,12 +101,11 @@
       <p id="warning"></p>
       <div class="row">
         <div class="col-sm">
-          <h2 style="display: inline-flex;">Generate percentage changes</h2>
+          <h2>Generate percentage changes</h2>
           <button type="button" class="btn btn-primary" id="generate-changes">Generate percentage changes</button>      
         </div>
         <div class="col-sm">
-          <h2 style="display: inline-flex;">Generate search volumes</h2>
-          <a style="display: inline-flex;margin-left: 5px;" id="loginLink" href="#">Settings</a>
+          <h2>Generate search volumes</h2>
           <button type="button" class="btn btn-primary" id="generate-search-volumes">Generate search volumes</button>      
         </div>
       </div>
@@ -113,7 +127,8 @@
         </div>
       </div>
       <hr>
-      <p style="margin-top: 1rem;text-align:center;font-size: 12px;">Google Search Console Enhanced Analytics by <a href="https://thijsvanhal.nl/" target="_blank">Thijs</a> - <a href="https://thijsvanhal.nl/projecten/google-search-console-enhanced-analytics/" target="_blank">Documentation</a> - <a href="https://thijsvanhal.nl/contact-me/" target="_blank">Report a bug</a> - <a href="https://www.buymeacoffee.com/thijsvanhal" target="_blank">Buy me a coffee</a></p>
+      <p style="margin-top: 1rem;text-align:center;font-size: 12px;"><a href="https://thijsvanhal.nl/projecten/google-search-console-enhanced-analytics/?utm_source=google&utm_medium=extension" target="_blank">Documentation</a><a style="margin-left: 10px;" href="https://thijsvanhal.nl/contact-me/" target="_blank">Report a bug</a><button type="button" class="btn btn-primary" id="loginLink" style="width: auto;margin-bottom: 0px;margin-left: 10px;">Settings</button></p>
+      <p style="margin-top: 1rem;text-align:center;font-size: 12px;">Google Search Console Enhanced Analytics by <a href="https://thijsvanhal.nl/?utm_source=google&utm_medium=extension" target="_blank">Thijs</a> - <a href="https://www.buymeacoffee.com/thijsvanhal" target="_blank">Buy me a coffee</a></p>
     </div>
     <script type="text/javascript" src="/files/js/bootstrap.min.js"></script>
     <script src="/files/js/easypick.js"></script>

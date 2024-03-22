@@ -255,50 +255,94 @@ changes.addEventListener("click", async () => {
 
 // Update checkbox changes
 const generatePercentChangesCheckbox = document.getElementById('keep-changes-alive');
-chrome.storage.session.get(["changes"]).then((result) => {
-    if (result.changes === true) {
-        generatePercentChangesCheckbox.checked = true;
+const generateDatesCheckbox = document.getElementById('keep-dates-alive');
+
+checkPermissions('storage').then((result) => {
+    if (result.storage === "yes") {
+        // Update changes settings
+        chrome.storage.session.get(["changes"]).then((result) => {
+            if (result.changes === true) {
+                generatePercentChangesCheckbox.checked = true;
+            }
+        });
+        
+        // Update statistic settings
+        chrome.storage.local.get(["method"]).then((result) => {
+            if (result.method === "exact") {
+                document.getElementById("exact").checked = true;
+            } else {
+                document.getElementById("rounded").checked = true;
+            }
+        });
+
+        // Update dates
+        chrome.storage.session.get(["dates"]).then(async (result) => {
+            if (result.dates === true) {
+                const startDateString = await chrome.storage.session.get("startDate");
+                const endDateString = await chrome.storage.session.get("endDate");
+        
+                const startDateYear = startDateString.startDate.slice(0, 4);
+                const startDateMonth = startDateString.startDate.slice(4, 6);
+                const startDateDay = startDateString.startDate.slice(6, 8);
+        
+                const endDateYear = endDateString.endDate.slice(0, 4);
+                const endDateMonth = endDateString.endDate.slice(4, 6);
+                const endDateDay = endDateString.endDate.slice(6, 8);
+        
+                document.getElementById('datepicker').value = `${startDateYear}-${startDateMonth}-${startDateDay} - ${endDateYear}-${endDateMonth}-${endDateDay}`;
+                generateDatesCheckbox.checked = true;
+                generateDatesCheckbox.disabled = false;
+            }
+        });
+    } else {
+        document.getElementById("rounded").checked = true;
     }
 });
 
 generatePercentChangesCheckbox.addEventListener('click', function () {
     if (generatePercentChangesCheckbox.checked) {
-        chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
-        chrome.storage.session.set({ changes: true });
-        generatePercentChangesCheckbox.checked = true;
+        checkPermissions('storage', 'webNavigation').then((result) => {
+            if (result.storage === 'yes' && result.webNavigation === 'yes') {
+                chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
+                chrome.storage.session.set({ changes: true });
+            } else {
+                chrome.permissions.request({
+                    permissions: ['storage', 'webNavigation']
+                }, (granted) => {
+                    if (granted) {
+                        chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
+                        chrome.storage.session.set({ changes: true });
+                        chrome.tabs.query({ active: true, currentWindow: true }).then((tab) => {
+                            chrome.runtime.sendMessage({ action: "updatePermissions", tabId: tab.id });
+                        });
+                    } else {
+                        generatePercentChangesCheckbox.checked = false;
+                    }
+                });
+            }
+        });
     } else {
-        chrome.storage.session.remove(["changes"]);
-    }
-});
-
-// Update checkbox dates
-const generateDatesCheckbox = document.getElementById('keep-dates-alive');
-chrome.storage.session.get(["dates"]).then(async (result) => {
-    if (result.dates === true) {
-        const startDateString = await chrome.storage.session.get("startDate");
-        const endDateString = await chrome.storage.session.get("endDate");
-
-        const startDateYear = startDateString.startDate.slice(0, 4);
-        const startDateMonth = startDateString.startDate.slice(4, 6);
-        const startDateDay = startDateString.startDate.slice(6, 8);
-
-        const endDateYear = endDateString.endDate.slice(0, 4);
-        const endDateMonth = endDateString.endDate.slice(4, 6);
-        const endDateDay = endDateString.endDate.slice(6, 8);
-
-        document.getElementById('datepicker').value = `${startDateYear}-${startDateMonth}-${startDateDay} - ${endDateYear}-${endDateMonth}-${endDateDay}`;
-        generateDatesCheckbox.checked = true;
-        generateDatesCheckbox.disabled = false;
+        checkPermissions('storage', 'webNavigation').then((result) => {
+            if (result.storage === 'yes') {
+                chrome.storage.session.remove(["changes"]);
+            }
+        });
     }
 });
 
 generateDatesCheckbox.addEventListener('click', function () {
     if (generateDatesCheckbox.checked) {
-        chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
-        chrome.storage.session.set({ dates: true });
-        generateDatesCheckbox.checked = true;
+        const hasStoragePermission = checkPermissions('storage');
+        if (hasStoragePermission === 'yes') {
+            chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
+            chrome.storage.session.set({ dates: true });
+            generateDatesCheckbox.checked = true;
+        }
     } else {
-        chrome.storage.session.remove(["dates"]);
+        const hasStoragePermission = checkPermissions('storage');
+        if (hasStoragePermission === 'yes') {
+            chrome.storage.session.remove(["dates"]);
+        }
     }
 });
 
@@ -311,33 +355,39 @@ let language;
 let instellingen = document.getElementById("instellingen");
 
 async function getCredentials() {
-    const loginData = await chrome.storage.local.get(["login"]);
-    const passwordData = await chrome.storage.local.get(["password"]);
-    const locationData = await chrome.storage.local.get(["location"]);
-    const languageData = await chrome.storage.local.get(["language"]);
+    const hasStoragePermission = await checkPermissions('storage');
+    if (hasStoragePermission === "yes") {
+        const [loginData, passwordData, locationData, languageData] = await Promise.all([
+            chrome.storage.local.get(["login"]),
+            chrome.storage.local.get(["password"]),
+            chrome.storage.local.get(["location"]),
+            chrome.storage.local.get(["language"]),
+        ]);
 
-    const loginSessionData = await chrome.storage.session.get(["login"]);
-    const passwordSessionData = await chrome.storage.session.get(["password"]);
-    const locationSessionData = await chrome.storage.session.get(["location"]);
-    const languageSessionData = await chrome.storage.session.get(["language"]);
-
-    if (loginData.login) {
-        login = loginData.login;
-        login_local = true;
-        password = passwordData.password;
-        country = locationData.location;
-        language = languageData.language;
-    } else if (loginSessionData.login) {
-        login = loginSessionData.login;
-        password = passwordSessionData.password;
-        if (locationSessionData.location) {
-            country = locationSessionData.location;
-            language = languageSessionData.language;
-        }
-    }  
+        const [loginSessionData, passwordSessionData, locationSessionData, languageSessionData] = await Promise.all([
+            chrome.storage.session.get(["login"]),
+            chrome.storage.session.get(["password"]),
+            chrome.storage.session.get(["location"]),
+            chrome.storage.session.get(["language"]),
+        ]);
+        if (loginData.login) {
+            login = loginData.login;
+            login_local = true;
+            password = passwordData.password;
+            country = locationData.location;
+            language = languageData.language;
+        } else if (loginSessionData.login) {
+            login = loginSessionData.login;
+            password = passwordSessionData.password;
+            if (locationSessionData.location) {
+                country = locationSessionData.location;
+                language = languageSessionData.language;
+            }
+        } 
+    }
     fetchLanguageData();
     fetchLocationData();
-}
+};
 
 getCredentials();
 
@@ -350,6 +400,13 @@ const backButton = document.getElementById("backButton");
 
 backButton.onclick = function () {
     instellingen.style = "display:none";
+    let percentage_value = document.getElementById("exact").checked;
+    if(percentage_value === true) {
+        chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
+        chrome.storage.local.set({ method: "exact" });
+    } else {
+        chrome.storage.local.remove(["method"]);
+    }
 };
 
 loginLink.onclick = function () {
@@ -373,6 +430,14 @@ loginButton.onclick = function() {
     let password_value = document.getElementById("inputAPI").value;
     let location_value = document.getElementById("search-location").value;
     let language_value = document.getElementById("search-language").value;
+
+    let percentage_value = document.getElementById("exact").checked;
+    if(percentage_value === true) {
+        chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
+        chrome.storage.local.set({ method: "exact" });
+    } else {
+        chrome.storage.local.remove(["method"]);
+    }
 
     if (rememberme.checked) {
         chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
@@ -513,3 +578,20 @@ volumesButton.addEventListener("click", async() => {
     let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     chrome.runtime.sendMessage({ action: "executeVolume", tabId: tab.id });
 });
+
+function checkPermissions(...permissions) {
+    return new Promise((resolve) => {
+        const results = {};
+        let checkedPermissions = 0;
+
+        permissions.forEach(permission => {
+            chrome.permissions.contains({ permissions: [permission] }, (result) => {
+                results[permission] = result ? "yes" : "no";
+                checkedPermissions++;
+                if (checkedPermissions === permissions.length) {
+                    resolve(results);
+                }
+            });
+        });
+    });
+}

@@ -23,9 +23,7 @@ async function getSessionData() {
 
 function addParametersToUrl(start_date, end_date, compare_start_date, compare_end_date) {
     const url = new URL(window.location.href);
-
-    const currentURL = window.location.href;
-    if (currentURL.includes('/search-console/performance/search-analytics') || currentURL.includes('/search-console/performance/discover') || currentURL.includes('/search-console/performance/google-news')) {
+    if (url.pathname.includes('/search-console/performance/search-analytics') || url.pathname.includes('/search-console/performance/discover') || url.pathname.includes('/search-console/performance/google-news')) {
         const start = url.searchParams.get('start_date');
         if (start === start_date) {
             return;

@@ -76,15 +76,15 @@ strong {
     color: #02343f !important;
     background-color: #fff;
     border-color: #031c22 !important;
-    margin-top: 10px;
     margin-bottom: 10px;
-    border-radius: 12px;
+    border-radius: 0.7rem;
     --bs-btn-hover-color: #f0edcc;
     --bs-btn-hover-bg: #dfdfdf;
     --bs-btn-hover-border-color: #031c22;
     --bs-btn-active-color: #f0edcc;
     --bs-btn-active-bg: #dfdfdf;
     --bs-btn-active-border-color: #031c22;
+    --bs-btn-border-width: 1.5px;
     width: 100%;
     line-height: 17px;
 }

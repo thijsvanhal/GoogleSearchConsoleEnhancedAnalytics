@@ -2,9 +2,9 @@ checkCurrentPage();
 
 async function checkCurrentPage() {
     let paginas = document.querySelectorAll('.zQTmif');
-    let latestPagina = paginas[paginas.length - 1];
+    latestPagina = paginas[paginas.length - 1];
     let currentURL = window.location.href;
-    while (latestPagina && latestPagina.id !== '') {
+    while (latestPagina && latestPagina.className.includes('oCHqfe')) {
         await new Promise(resolve => setTimeout(resolve, 1000));
         paginas = document.querySelectorAll('.zQTmif');
         latestPagina = paginas[paginas.length - 1];
@@ -15,7 +15,7 @@ async function checkCurrentPage() {
     }
 }
 
-function processStatistics() {
+async function processStatistics() {
     let min;
     const currentURL = window.location.href;
     if (currentURL.includes('/search-console/performance/search-analytics')) {
@@ -24,14 +24,14 @@ function processStatistics() {
         min = 6;
     }
 
-    const percentageElements = document.querySelectorAll(".percentage");
+    const percentageElements = latestPagina.querySelectorAll(".percentage");
     percentageElements.forEach(element => {
         element.remove();
     });
 
     const stats = [];
 
-    const statsElements = document.querySelectorAll('.CJvxcd');
+    const statsElements = latestPagina.querySelectorAll('.CJvxcd');
     statsElements.forEach((statElement, index) => {
         const titleValue = statElement.getAttribute('title');
         if (index >= statsElements.length - min) {
