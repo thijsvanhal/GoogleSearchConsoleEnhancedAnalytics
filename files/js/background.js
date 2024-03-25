@@ -1,5 +1,4 @@
-function setupListeners() {   
-    console.log("jaa");
+function setupListeners() {  
     chrome.permissions.contains({
         permissions: ['webNavigation'],
     }, (result) => {
@@ -41,7 +40,6 @@ function setupListeners() {
             }, filter);
             
             chrome.webNavigation.onHistoryStateUpdated.addListener(async (details) => {
-                console.log("jaa");
                 let tabId = details.tabId;
                 chrome.storage.session.get(["changes"], async (result) => {
                     if (result.changes === true) {
@@ -71,6 +69,14 @@ function setupListeners() {
         }
     });
 }
+
+chrome.permissions.contains({
+    permissions: ['webNavigation'],
+}, (result) => {
+    if (result) {
+        setupListeners();
+    }
+});
 
 chrome.runtime.onMessage.addListener(async (message, sender) => {
     if (message.action === "executeStatistieken") {
