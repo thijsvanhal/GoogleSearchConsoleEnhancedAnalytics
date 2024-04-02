@@ -40,8 +40,16 @@ async function processStatistics() {
     });
 
     for (let i = 0; i < stats.length; i += 2) {
-        const currentValue = parseNumberWithComma(stats[i]);
-        const previousValue = parseNumberWithComma(stats[i + 1]);
+        let currentValue;
+        let previousValue;
+        if (stats[0].includes('.') || stats[2].includes('.') || stats[4].includes(',') || stats[6].includes(',')) {
+            currentValue = parseNumberWithComma(stats[i]);
+            previousValue = parseNumberWithComma(stats[i + 1]);
+        } else {
+            currentValue = parseNumberWithDot(stats[i]);
+            previousValue = parseNumberWithDot(stats[i + 1]);
+        }
+        
         if (previousValue !== undefined) {
             const percentageElementIndex = statsElements.length - min + i;
             const percentageElement = statsElements[percentageElementIndex].querySelector('.percentage');
@@ -60,6 +68,12 @@ async function processStatistics() {
 // Vergelijken van data
 function parseNumberWithComma(numberString) {
     const normalizedNumberString = numberString.replace(/\./g, '').replace(',', '.').trim();
+    const numericValue = parseFloat(normalizedNumberString.replace(/[a-zA-Z]+$/, ''));
+    return numericValue * 1;
+}
+
+function parseNumberWithDot(numberString) {
+    const normalizedNumberString = numberString.replace(/\,/g, '').trim();
     const numericValue = parseFloat(normalizedNumberString.replace(/[a-zA-Z]+$/, ''));
     return numericValue * 1;
 }

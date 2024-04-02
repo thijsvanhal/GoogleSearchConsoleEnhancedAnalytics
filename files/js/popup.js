@@ -48,6 +48,7 @@ const currentQuarter = Math.floor(today.getMonth() / 3);;
 const dMaandStart = startDate.setDate(1);
 const dMaandEnd = endDate.setDate(today.getDate() - 2);
 
+endDate = new Date(today);
 const aMaandStart = startDate.setMonth(today.getMonth() - 1, 1);
 const aMaandEnd = endDate.setDate(0);
 
@@ -193,6 +194,10 @@ function customSelection() {
     if (document.getElementById('previous').checked == true) {
         switch (keuze) {
             case 'This month':
+                if ((today.getDate() === 1 || today.getDate() === 2)) {
+                    warning_text.innerHTML = "This extension sets the end date 2 days in the past to be sure Google Search Console shows data. This comparison is not possible, try again the third of the month.";
+                    return;
+                };
                 previousStartDate = getPreviousMonth(startDate);
                 previousEndDate = getPreviousMonth(endDate);
                 break;
@@ -229,7 +234,10 @@ function customSelection() {
         yearEndDate = getPreviousYear(endDate);
         if (yearStartDate < beginDate) {
             warning_text.innerHTML = `Your comparison start date is before ${beginDateString} (max. start date in Google Search Console) , you will not see all your data.`;
-        }
+        } else if (keuze === 'This month' && today.getDate() === 1 || keuze === 'This month' && today.getDate() === 2) {
+            warning_text.innerHTML = "This extension sets the end date 2 days in the past to be sure Google Search Console shows data. This comparison is not possible, try again the third of the month.";
+            return;
+        };
         const yearStartDateFormat = formatDate(yearStartDate);
         const yearEndDateFormat = formatDate(yearEndDate);
         addParametersToUrl({start_date: startDateFormat, end_date: endDateFormat, compare_start_date: yearStartDateFormat, compare_end_date: yearEndDateFormat});
