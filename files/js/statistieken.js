@@ -92,14 +92,14 @@ function updateStatisticsPercentage(statElement, currentValue, previousValue) {
 
     statElement.parentNode.insertBefore(percentageElement, statElement.nextSibling);
 
-    const percentageElements = document.querySelectorAll('.percentage');
+    const percentageElements = latestPagina.querySelectorAll('.percentage');
 
     if (percentage > 0) {
         percentageElement.style.color = '#68ce12';
     } else if (percentage < 0) {
         percentageElement.style.color = '#dd300b';
     }
-    
+
     if (percentageElements[3]) {
         if (percentage > 0) {
             percentageElement.style.color.remove;

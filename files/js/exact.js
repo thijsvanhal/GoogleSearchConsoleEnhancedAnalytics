@@ -1,6 +1,6 @@
-checkCurrentPage();
+checkforCurrentPage();
 
-async function checkCurrentPage() {
+async function checkforCurrentPage() {
     let paginas = document.querySelectorAll('.zQTmif');
     latestPagina = paginas[paginas.length - 1];
     let currentURL = window.location.href;
@@ -11,11 +11,11 @@ async function checkCurrentPage() {
         currentURL = window.location.href;
     }
     if (currentURL.includes('/search-console/performance/search-analytics') || currentURL.includes('/search-console/performance/discover') || currentURL.includes('/search-console/performance/google-news')) {
-        processStatistics();
+        generateExactValues();
     }
 }
 
-async function processStatistics() {
+async function generateExactValues() {
     let min;
     const currentURL = window.location.href;
     if (currentURL.includes('/search-console/performance/search-analytics')) {
