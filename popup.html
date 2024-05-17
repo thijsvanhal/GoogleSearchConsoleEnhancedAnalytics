@@ -81,10 +81,15 @@
     <div class="container-lg" id="blauwe-container">
       <h2>Select a period and comparison method</h2>
       <div class="row" style="margin-top: 1rem; margin-bottom: 1rem;">
-        <div class="col-sm-5" style="display: flex;align-items: center;">
+        <div class="col-sm" style="display: flex;align-items: center;">
           <input class="form-control" id="datepicker" value="Select period" style="margin-bottom: 0px;" />
         </div>
-        <div class="col-sm" style="display: flex;justify-content: center;align-items: center;">
+        <div class="col-sm" id="custom-comparison" style="display: flex;align-items: center;">
+          <input class="form-control" id="datepickercomparison" value="Select comparison period" style="margin-bottom: 0px;" disabled/>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; margin-bottom: 1rem;">
+        <div class="col-sm" style="display: flex;align-items: center;">
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="flexRadioDefault" id="previous" checked=""/>
             <label class="form-check-label" for="previous" style="font-size: 14px;"> Previous period </label>
@@ -92,6 +97,10 @@
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="flexRadioDefault" id="year"/>
             <label class="form-check-label" for="year" style="font-size: 14px;"> Previous year </label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="custom"/>
+            <label class="form-check-label" for="custom" style="font-size: 14px;"> Custom </label>
           </div>
         </div>
       </div>

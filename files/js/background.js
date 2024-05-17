@@ -19,6 +19,10 @@ function setupListeners() {
                             target: { tabId: tabId },
                             files: ['/files/js/statistieken.js'],
                         });
+                        chrome.scripting.executeScript({
+                            target: { tabId: tabId },
+                            files: ['/files/js/xlsx.js', '/files/js/button.js'],
+                        });
                     }
                 });
                 chrome.storage.session.get(["dates"], async (result) => {
@@ -46,6 +50,10 @@ function setupListeners() {
                         chrome.scripting.executeScript({
                             target: { tabId: tabId },
                             files: ['/files/js/statistieken.js'],
+                        });
+                        chrome.scripting.executeScript({
+                            target: { tabId: tabId },
+                            files: ['/files/js/xlsx.js', '/files/js/button.js'],
                         });
                     }
                 });
@@ -84,10 +92,18 @@ chrome.runtime.onMessage.addListener(async (message, sender) => {
             target: { tabId: message.tabId },
             files: ['/files/js/statistieken.js'],
         });
+        chrome.scripting.executeScript({
+            target: { tabId: message.tabId },
+            files: ['/files/js/xlsx.js', '/files/js/button.js'],
+        });
     } else if (message.action === "executeVolume") {
         chrome.scripting.executeScript({
             target: { tabId: message.tabId },
             files: ['/files/js/zoekvolumes.js'],
+        });
+        chrome.scripting.executeScript({
+            target: { tabId: message.tabId },
+            files: ['/files/js/xlsx.js', '/files/js/button.js'],
         });
     } else if (message.action == "updateUrl") {
         updateTabUrl(sender.tab.id, message.url);

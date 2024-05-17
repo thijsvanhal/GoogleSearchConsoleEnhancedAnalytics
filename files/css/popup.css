@@ -97,6 +97,10 @@ strong {
     font-size: 14px;
 }
 
+.form-control:disabled {
+    background-color: #b7babd;
+}
+
 .form-select {
     border: 2px solid #02343f;
     margin-bottom: 1rem;
@@ -145,7 +149,7 @@ strong {
     background-size: 16px 12px;
 }
 
-#datepicker {
+#datepicker, #datepickercomparison {
     width: 100%;
     padding: 10px;
     border-radius: 0.7rem;

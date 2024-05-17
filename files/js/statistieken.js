@@ -87,7 +87,7 @@ function updateStatisticsPercentage(statElement, currentValue, previousValue) {
     const percentage = calculatePercentage(currentValue, previousValue);
     const percentageElement = document.createElement('span');
     percentageElement.textContent = ` ${percentage}%`;
-    percentageElement.className = 'percentage';
+    percentageElement.className = 'percentage summary';
     percentageElement.style.paddingLeft = '5px';
 
     statElement.parentNode.insertBefore(percentageElement, statElement.nextSibling);
@@ -122,43 +122,47 @@ function tableChanges(selector) {
             
             const changeElements = huidigeTab.querySelectorAll(selector);
             for (let i = 0; i < changeElements.length; i += 3) {
+                let currentValue;
+                let previousValue;
+                let percentageChange;
                 if (selector === '.CC8hte' || selector === '.OCEh7') {
-                    var currentValue = parseFloat(changeElements[i].textContent.replace(/\D/g, ''));
-                    var previousValue = parseFloat(changeElements[i + 1].textContent.replace(/\D/g, ''));
+                    currentValue = parseFloat(changeElements[i].textContent.replace(/\D/g, ''));
+                    previousValue = parseFloat(changeElements[i + 1].textContent.replace(/\D/g, ''));
                 } else {
-                    var currentValue = parseNumberWithComma(changeElements[i].innerText);
-                    var previousValue = parseNumberWithComma(changeElements[i + 1].innerText);
+                    if (changeElements[i].innerText.includes('.') || changeElements[i + 1].innerText.includes('.')) {
+                        currentValue = parseNumberWithDot(changeElements[i].innerText);
+                        previousValue = parseNumberWithDot(changeElements[i + 1].innerText);
+                    } else {
+                        currentValue = parseNumberWithComma(changeElements[i].innerText);
+                        previousValue = parseNumberWithComma(changeElements[i + 1].innerText);
+                    }
+                    
                 }
                 if (currentValue === 0 || previousValue === 0) {
-                    var percentageChange = 'N/A';
+                    percentageChange = 'N/A';
                 } else {
-                    var percentageChange = calculatePercentage(currentValue, previousValue);
+                    percentageChange = calculatePercentage(currentValue, previousValue);
                 }
         
                 const percentageChangeElement = document.createElement('span');
                 percentageChangeElement.textContent = ` ${percentageChange}%`;
-                percentageChangeElement.className = 'percentage';
+                percentageChangeElement.className = `percentage table s${selector.replace(/\./g,'')}`;
                 percentageChangeElement.style.paddingLeft = '5px';
         
-                if (!changeElements[i + 2].querySelector('.percentage')) {
-                    changeElements[i + 2].appendChild(percentageChangeElement);
+                const nextSibling = changeElements[i + 2].nextElementSibling;
+                if (!nextSibling) {
+                    changeElements[i + 2].insertAdjacentElement('afterend', percentageChangeElement);
                 
-                    if (selector === '.CrQbQ') {
-                        if (percentageChange !== 'N/A') {
-                            if (percentageChange > 0) {
-                                percentageChangeElement.style.color = '#dd300b';
-                            } else if (percentageChange < 0) {
-                                percentageChangeElement.style.color = '#68ce12';
-                            }
+                    if (percentageChange !== 'N/A') {
+                        let color = '#0000008a';
+                        if (selector === '.CrQbQ') {
+                            color = percentageChange > 0 ? '#dd300b' : (percentageChange < 0 ? '#68ce12' : color);
+                        } else {
+                            color = percentageChange > 0 ? '#68ce12' : (percentageChange < 0 ? '#dd300b' : color);
                         }
+                        percentageChangeElement.style.color = color;
                     } else {
-                        if (percentageChange !== 'N/A') {
-                            if (percentageChange > 0) {
-                                percentageChangeElement.style.color = '#68ce12';
-                            } else if (percentageChange < 0) {
-                                percentageChangeElement.style.color = '#dd300b';
-                            }
-                        }
+                        percentageChangeElement.style.color = '#0000008a';
                     }
                 }
             }

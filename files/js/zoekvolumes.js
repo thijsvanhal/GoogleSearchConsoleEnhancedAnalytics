@@ -9,10 +9,10 @@ function Variables() {
     taskIds = undefined;
     pages = undefined;
     latestPage = undefined;
-    checkCurrentPage();
+    checkCurrentPageZoekvolume();
 }
 
-async function checkCurrentPage() {
+async function checkCurrentPageZoekvolume() {
     pages = document.querySelectorAll('.zQTmif');
     latestPage = pages[pages.length - 1];
     while (latestPage && latestPage.id !== '') {
@@ -87,10 +87,10 @@ async function getVolumes() {
     for (const zoekwoord of zoekwoorden) {
         for(let i = 0; i < mixedKeywordsArray[0].mixedKeywords.length; i++) {
             if(mixedKeywordsArray[0].mixedKeywords[i] === zoekwoord.innerText) {
-                const percentageChangeElement = document.createElement('span');
-                percentageChangeElement.textContent = ` - ${mixedKeywordsArray[0].searchVolume[i]}`;
-                percentageChangeElement.className = 'searchvolume';
-                zoekwoord.appendChild(percentageChangeElement);
+                const searchVolumeElement = document.createElement('span');
+                searchVolumeElement.textContent = ` - ${mixedKeywordsArray[0].searchVolume[i]}`;
+                searchVolumeElement.className = 'searchvolume';
+                zoekwoord.appendChild(searchVolumeElement);
             }
         }
     }
@@ -123,7 +123,7 @@ async function SearchVolumeData(keywords, country, language) {
         // POST request
         const post_response = await fetch(post_url, { ...requestPostOptions, body: JSON.stringify(post_array) });
         if (post_response.ok === false) {
-            statusElement.innerHTML = `<p>Oops! There has been an error when accessing DataForSEO: <b>${post_response.status} - ${post_response.statusText}</b></p>`;
+            statusElement.innerHTML = `<p>Oops! There has been an error when accessing DataForSEO: <b>${post_response.status} - ${post_response.statusText}</b>. Do you think this is an error? <a href="https://thijsvanhal.nl/contact-me/?utm_source=google&utm_medium=extension">Report this bug</a></p>`;
             return;
         } else {
             const post_result = await post_response.json();
@@ -132,7 +132,7 @@ async function SearchVolumeData(keywords, country, language) {
             if (status === 20100) {
                 taskIds.push(post_result.tasks[0].id);
             } else {
-                statusElement.innerHTML = `<p>Oops! There has been an error: <b>${post_result.tasks[0].status_message}</b></p>`;
+                statusElement.innerHTML = `<p>Oops! There has been an error: <b>${post_result.tasks[0].status_message}</b><a href="https://thijsvanhal.nl/contact-me/?utm_source=google&utm_medium=extension"> Report this bug</a></p>`;
                 return;
             }
         }
@@ -201,6 +201,11 @@ function isValidKeywordPhrase(phrase) {
 
     const fourByteUnicodeRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]|[\u{10000}-\u{10FFFF}]/u;
     if (fourByteUnicodeRegex.test(modifiedPhrase)) {
+        return false;
+    }
+
+    const replacementCharRegex = /\uFFFD/;
+    if (replacementCharRegex.test(modifiedPhrase)) {
         return false;
     }
 

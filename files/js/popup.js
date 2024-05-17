@@ -74,6 +74,8 @@ let dJaarEnd = endDate.setDate(today.getDate() - 2);
 
 let startDateSelection;
 let endDateSelection;
+let comparisonStartDateSelection;
+let comparisonEndDateSelection;
 
 const picker = new easepick.create({
     element: "#datepicker",
@@ -104,12 +106,65 @@ const picker = new easepick.create({
         },
         customLabels: ['This month', 'Last month', 'This quarter', 'Last quarter', 'This year']
     },
+    AmpPlugin: {
+        dropdown: {
+            months: true,
+            years: true,
+            minYear: 2022
+        },
+        darkMode: false
+    },
     plugins: [
         "RangePlugin",
         "LockPlugin",
-        "PresetPlugin"
+        "PresetPlugin",
+        "AmpPlugin"
     ]
 })
+
+const customSelectionElement = document.getElementById("custom");
+const customComparisonElement = document.getElementById("datepickercomparison");
+customSelectionElement.addEventListener("click", function() {
+    if (customSelectionElement.checked == true) {
+        customComparisonElement.removeAttribute("disabled");
+    } else {
+        customComparisonElement.setAttribute("disabled", "disabled");
+    }
+});
+
+const pickerComparison = new easepick.create({
+    element: "#datepickercomparison",
+    css: [
+        "/files/css/easypick.css",
+        "files/css/popup.css"
+    ],
+    setup(picker) {
+        picker.on('select', (e) => {
+            comparisonStartDateSelection = e.detail.start;
+            comparisonEndDateSelection = e.detail.end;
+        });
+    },
+    zIndex: 10,
+    LockPlugin: {
+        presets: false,
+        minDate: beginDateString,
+        maxDate: yesterdayString
+    },
+    AmpPlugin: {
+        dropdown: {
+            months: true,
+            years: true,
+            minYear: 2022
+        },
+        darkMode: false
+    },
+    plugins: [
+        "RangePlugin",
+        "LockPlugin",
+        "AmpPlugin"
+    ]
+})
+pickerComparison.ui.container.style.marginLeft = "-80px";
 
 let keuze;
 const root = document.querySelector('.easepick-wrapper')
@@ -228,6 +283,12 @@ function customSelection() {
         }
         const previousStartDateFormat = formatDate(previousStartDate);
         const previousEndDateFormat = formatDate(previousEndDate);
+        addParametersToUrl({start_date: startDateFormat, end_date: endDateFormat, compare_start_date: previousStartDateFormat, compare_end_date: previousEndDateFormat});
+    } else if (document.getElementById('custom').checked == true) {
+        const previousstartDate = new Date(comparisonStartDateSelection);
+        const previousendDate = new Date(comparisonEndDateSelection);
+        const previousStartDateFormat = formatDate(previousstartDate);
+        const previousEndDateFormat = formatDate(previousendDate);
         addParametersToUrl({start_date: startDateFormat, end_date: endDateFormat, compare_start_date: previousStartDateFormat, compare_end_date: previousEndDateFormat});
     } else {
         yearStartDate = getPreviousYear(startDate);
