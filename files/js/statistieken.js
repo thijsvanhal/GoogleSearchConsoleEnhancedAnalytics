@@ -49,6 +49,7 @@ async function processStatistics() {
             currentValue = parseNumberWithDot(stats[i]);
             previousValue = parseNumberWithDot(stats[i + 1]);
         }
+        console.log(currentValue, previousValue);
         
         if (previousValue !== undefined) {
             const percentageElementIndex = statsElements.length - min + i;
@@ -67,13 +68,13 @@ async function processStatistics() {
 
 // Vergelijken van data
 function parseNumberWithComma(numberString) {
-    const normalizedNumberString = numberString.replace(/\./g, '').replace(',', '.').trim();
+    const normalizedNumberString = numberString.replace(/\s+/g, '').replace(/\./g, '').replace(',', '.').trim();
     const numericValue = parseFloat(normalizedNumberString.replace(/[a-zA-Z]+$/, ''));
     return numericValue * 1;
 }
 
 function parseNumberWithDot(numberString) {
-    const normalizedNumberString = numberString.replace(/\,/g, '').trim();
+    const normalizedNumberString = numberString.replace(/\s+/g, '').replace(/\,/g, '').trim();
     const numericValue = parseFloat(normalizedNumberString.replace(/[a-zA-Z]+$/, ''));
     return numericValue * 1;
 }
