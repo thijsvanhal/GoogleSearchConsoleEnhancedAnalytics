@@ -194,7 +194,7 @@ function isValidKeywordPhrase(phrase) {
         return false;
     }
 
-    const invalidSymbolsRegex = /[,!@%^()={}~`<>?\\|―®™]/;
+    const invalidSymbolsRegex = /[,!@%^()={}~`<>?\\|―®™&]/;
     if (invalidSymbolsRegex.test(modifiedPhrase)) {
         return false;
     }
