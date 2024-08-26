@@ -6,20 +6,8 @@
   </head>
   <body>
     <div class="container-lg" id="instellingen" style="display:none;">
-      <h2 style="display: inline-flex;">Metric settings</h2>
-      <div class="row" style="display: inline-flex; margin-left: 395px;">
+      <div class="row" style="display: inline-flex; margin-left: 490px;">
         <button type="button" class="btn btn-primary" id="backButton" style="width: auto;">Close</button>
-      </div>
-      <p style="margin-bottom: 0.5rem;">How do you want the metrics above the chart to show up?</p>
-      <div style="display: inline-flex;align-items: center;margin-bottom: 1rem;">
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="flexRadioDefault" id="rounded" checked>
-          <label class="form-check-label" for="rounded" style="font-size: 14px;"> Standard </label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="flexRadioDefault" id="exact">
-          <label class="form-check-label" for="exact" style="font-size: 14px;"> Exact </label>
-        </div>
       </div>
       <h2>Search volume API settings</h2>
       <p>This extension is BYOK based and uses DataForSEO. Each request of 1000 keywords <strong>costs $0.05</strong>. Check out <a style="font-size: 14px;" href="https://thijsvanhal.nl/projecten/google-search-console-enhanced-analytics/#search-volumes" target="_blank">the documentation</a> for more info.</p>
@@ -61,11 +49,10 @@
             <button type="button" class="btn btn-primary" id="loginButton" style="margin-right: 5px;">Save</button>
             <button type="button" class="btn btn-primary secondbutton" id="deleteButton" style="display: none;">Delete data</button>
           </div>
-          
         </form>
       </div>
     </div>
-    <div class="container-lg"> 
+    <div class="container-lg" style="margin-bottom: -0.8rem;"> 
       <div class="row">
         <div class="col-sm">
           <button type="button" class="btn btn-primary secondbutton" id="last-month-btn" style="height: 48px;">Last month</button>
@@ -79,7 +66,7 @@
       </div>
     </div>
     <div class="container-lg" id="blauwe-container">
-      <h2>Select a period and comparison method</h2>
+      <h2>Select a period and (optionally) a comparison method</h2>
       <div class="row" style="margin-top: 1rem; margin-bottom: 1rem;">
         <div class="col-sm" style="display: flex;align-items: center;">
           <input class="form-control" id="datepicker" value="Select period" style="margin-bottom: 0px;" />
@@ -91,7 +78,7 @@
       <div class="row" style="margin-top: 1rem; margin-bottom: 1rem;">
         <div class="col-sm" style="display: flex;align-items: center;">
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="flexRadioDefault" id="previous" checked=""/>
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="previous"/>
             <label class="form-check-label" for="previous" style="font-size: 14px;"> Previous period </label>
           </div>
           <div class="form-check form-check-inline">
@@ -104,7 +91,7 @@
           </div>
         </div>
       </div>
-      <button type="button" class="btn btn-primary secondbutton" id="compare">Compare</button>
+      <button type="button" class="btn btn-primary secondbutton" id="compare">Apply date range</button>
     </div>
     <div class="container-lg" style="margin-top: 1.5rem;">
       <p id="warning" style="margin-top: -10px;"></p>
@@ -119,25 +106,35 @@
         </div>
       </div>
     </div>
+    <hr>
     <div class="container-lg" style="margin-top: 0.5rem;">
-      <h2>Session settings</h2>
       <div class="row">
         <div class="col-sm">
+          <h2>Session settings</h2>
           <div class="form-check form-switch form-check">
-            <input class="form-check-input" type="checkbox" role="switch" id="keep-changes-alive">
-            <label class="form-check-label" for="keep-changes-alive" style="font-size: 14px;">Generate % changes in session</label>
+            <input class="form-check-input" type="checkbox" role="switch" id="keep-changes-alive-session">
+            <label class="form-check-label" for="keep-changes-alive-session" style="font-size: 14px;">Generate % changes in session</label>
           </div>
-        </div>
-        <div class="col-sm">
           <div class="form-check form-switch form-check">
             <input class="form-check-input" type="checkbox" role="switch" id="keep-dates-alive" disabled>
             <label class="form-check-label" for="keep-changes-alive" style="font-size: 14px;">Keep date selection in session</label>
           </div>
         </div>
+        <div class="col-sm">
+          <h2>Permanent settings</h2>
+          <div class="form-check form-switch form-check">
+            <input class="form-check-input" type="checkbox" role="switch" id="keep-changes-alive-permanent">
+            <label class="form-check-label" for="keep-changes-alive-permanent" style="font-size: 14px;">Always generate % changes</label>
+          </div>
+          <div class="form-check form-switch form-check">
+            <input class="form-check-input" type="checkbox" role="switch" id="show-exact-metrics">
+            <label class="form-check-label" for="show-exact-metrics" style="font-size: 14px;">Show exact metrics above the chart</label>
+          </div>
+        </div>
       </div>
       <hr>
-      <p style="margin-top: 1rem;text-align:center;font-size: 12px;"><a href="https://thijsvanhal.nl/projecten/google-search-console-enhanced-analytics/?utm_source=google&utm_medium=extension" target="_blank">Documentation</a><a style="margin-left: 10px;" href="https://thijsvanhal.nl/contact-me/?utm_source=google&utm_medium=extension" target="_blank">Report a bug</a><button type="button" class="btn btn-primary" id="loginLink" style="width: auto;margin-bottom: 0px;margin-left: 10px;">Settings</button></p>
-      <p style="margin-top: 1rem;text-align:center;font-size: 12px;">Google Search Console Enhanced Analytics by <a href="https://thijsvanhal.nl/?utm_source=google&utm_medium=extension" target="_blank">Thijs</a> - <a href="https://www.buymeacoffee.com/thijsvanhal" target="_blank">Buy me a coffee</a></p>
+      <p style="margin-top: 1rem;text-align:center;font-size: 12px;"><a href="https://thijsvanhal.nl/projecten/google-search-console-enhanced-analytics/?utm_source=google&utm_medium=extension" target="_blank">Documentation</a><a style="margin-left: 10px;" href="https://thijsvanhal.nl/contact-me/?utm_source=google&utm_medium=extension" target="_blank">Report a bug</a><button type="button" class="btn btn-primary" id="loginLink" style="width: auto;margin-bottom: 0px;margin-left: 10px;">API Settings</button></p>
+      <p style="margin-top: 1rem;margin-bottom: -10px;text-align:center;font-size: 12px;">Google Search Console Enhanced Analytics by <a href="https://thijsvanhal.nl/?utm_source=google&utm_medium=extension" target="_blank">Thijs</a> - <a href="https://www.buymeacoffee.com/thijsvanhal" target="_blank">Buy me a coffee</a></p>
     </div>
     <script type="text/javascript" src="/files/js/bootstrap.min.js"></script>
     <script src="/files/js/easypick.js"></script>

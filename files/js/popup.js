@@ -6,6 +6,8 @@ function addParametersToUrl(params) {
         url.searchParams.delete('end_date');
         url.searchParams.delete('compare_start_date');
         url.searchParams.delete('compare_end_date');
+        url.searchParams.delete('compare_date');
+        url.searchParams.delete('num_of_months');
         url.searchParams.set('start_date', params.start_date);
         url.searchParams.set('end_date', params.end_date);
         if (params.compare_start_date && params.compare_end_date) {
@@ -18,8 +20,13 @@ function addParametersToUrl(params) {
     chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
     chrome.storage.session.set({ startDate: params.start_date });
     chrome.storage.session.set({ endDate: params.end_date });
-    chrome.storage.session.set({ compareStartDate: params.compare_start_date });
-    chrome.storage.session.set({ compareEndDate: params.compare_end_date });
+    if (params.compare_start_date) {
+        chrome.storage.session.set({ compareStartDate: params.compare_start_date });
+        chrome.storage.session.set({ compareEndDate: params.compare_end_date });
+    } else {
+        chrome.storage.session.remove(["compareStartDate"]);
+        chrome.storage.session.remove(["compareEndDate"]);
+    }
     document.getElementById('keep-dates-alive').disabled = false;
     keuze = '';
 }
@@ -39,6 +46,25 @@ const yesterdayString = yesterday.toISOString().split("T")[0];
 
 const currentDate = new Date();
 currentDate.setDate(currentDate.getDate() - 1);
+
+const sevenStartDate = new Date();
+sevenStartDate.setDate(currentDate.getDate() - 7);
+
+const twentyEightStartDate = new Date();
+twentyEightStartDate.setDate(currentDate.getDate() - 28);
+
+const threeMonthStartDate = new Date(currentDate);
+threeMonthStartDate.setMonth(currentDate.getMonth() - 3);
+
+const sixMonthStartDate = new Date(currentDate);
+sixMonthStartDate.setMonth(currentDate.getMonth() - 6);
+
+const twelveMonthStartDate = new Date(currentDate);
+twelveMonthStartDate.setFullYear(currentDate.getFullYear() - 1);
+
+const sixTeenMonthStartDate = new Date(currentDate); 
+sixTeenMonthStartDate.setFullYear(currentDate.getFullYear() - 1, currentDate.getMonth() - 4);
+
 
 //Datepicker
 const startDate = new Date(currentDate);
@@ -88,6 +114,34 @@ const picker = new easepick.create({
             startDateSelection = e.detail.start;
             endDateSelection = e.detail.end;
         });
+
+        picker.on('view', () => {
+            const presetContainer = picker.ui.container.querySelector('.preset-plugin-container');
+            if (presetContainer) {
+                const presetButtons = Array.from(picker.ui.container.querySelectorAll('.preset-button.unit'));
+
+                const column1 = document.createElement('div');
+                const column2 = document.createElement('div');
+
+                presetButtons.slice(0, 5).forEach(button => column1.appendChild(button));
+                presetButtons.slice(5).forEach(button => column2.appendChild(button));
+
+                column1.style.display = 'flex';
+                column1.style.flexDirection = 'column';
+                column1.style.marginRight = '10px';
+
+                column2.style.display = 'flex';
+                column2.style.flexDirection = 'column';
+
+                presetContainer.style.display = 'flex';
+                presetContainer.style.flexDirection = 'row';
+                presetContainer.style.width = '222px';
+
+                presetContainer.innerHTML = '';
+                presetContainer.appendChild(column1);
+                presetContainer.appendChild(column2);
+            }
+        });
     },
     zIndex: 10,
     LockPlugin: {
@@ -103,8 +157,14 @@ const picker = new easepick.create({
             'This quarter': [new Date(dKwartaalStart), new Date(dKwartaalEnd)],
             'Last quarter': [new Date(lKwartaalStart), new Date(lKwartaalEnd)],
             'This year': [new Date(dJaarStart), new Date(dJaarEnd)],
+            'Last 7 days': [new Date(sevenStartDate), new Date(yesterday)],
+            'Last 28 days': [new Date(twentyEightStartDate), new Date(yesterday)],
+            'Last 3 months': [new Date(threeMonthStartDate), new Date(yesterday)],
+            'Last 6 months': [new Date(sixMonthStartDate), new Date(yesterday)],
+            'Last 12 months': [new Date(twelveMonthStartDate), new Date(yesterday)],
+            'Last 16 months': [new Date(sixTeenMonthStartDate), new Date(yesterday)],
         },
-        customLabels: ['This month', 'Last month', 'This quarter', 'Last quarter', 'This year']
+        customLabels: ['This month', 'Last month', 'This quarter', 'Last quarter', 'This year', 'Last 7 days', 'Last 28 days', 'Last 3 months', 'Last 6 months', 'Last 12 months', 'Last 16 months']
     },
     AmpPlugin: {
         dropdown: {
@@ -122,13 +182,33 @@ const picker = new easepick.create({
     ]
 })
 
-const customSelectionElement = document.getElementById("custom");
+// Event listeners
 const customComparisonElement = document.getElementById("datepickercomparison");
+const compareButton = document.getElementById("compare"); 
+
+const customSelectionElement = document.getElementById("custom");
 customSelectionElement.addEventListener("click", function() {
     if (customSelectionElement.checked == true) {
         customComparisonElement.removeAttribute("disabled");
+        compareButton.innerText = 'Compare date range';
     } else {
         customComparisonElement.setAttribute("disabled", "disabled");
+    }
+});
+
+const previousSelectionElement = document.getElementById("previous");
+previousSelectionElement.addEventListener("click", function() {
+    if (previousSelectionElement.checked == true) {
+        customComparisonElement.setAttribute("disabled", "disabled");
+        compareButton.innerText = 'Compare date range';
+    }
+});
+
+const yearSelectionElement = document.getElementById("year");
+yearSelectionElement.addEventListener("click", function() {
+    if (yearSelectionElement.checked == true) {
+        customComparisonElement.setAttribute("disabled", "disabled");
+        compareButton.innerText = 'Compare date range';
     }
 });
 
@@ -284,13 +364,7 @@ function customSelection() {
         const previousStartDateFormat = formatDate(previousStartDate);
         const previousEndDateFormat = formatDate(previousEndDate);
         addParametersToUrl({start_date: startDateFormat, end_date: endDateFormat, compare_start_date: previousStartDateFormat, compare_end_date: previousEndDateFormat});
-    } else if (document.getElementById('custom').checked == true) {
-        const previousstartDate = new Date(comparisonStartDateSelection);
-        const previousendDate = new Date(comparisonEndDateSelection);
-        const previousStartDateFormat = formatDate(previousstartDate);
-        const previousEndDateFormat = formatDate(previousendDate);
-        addParametersToUrl({start_date: startDateFormat, end_date: endDateFormat, compare_start_date: previousStartDateFormat, compare_end_date: previousEndDateFormat});
-    } else {
+    } else if (document.getElementById('year').checked == true) {
         yearStartDate = getPreviousYear(startDate);
         yearEndDate = getPreviousYear(endDate);
         if (yearStartDate < beginDate) {
@@ -302,10 +376,17 @@ function customSelection() {
         const yearStartDateFormat = formatDate(yearStartDate);
         const yearEndDateFormat = formatDate(yearEndDate);
         addParametersToUrl({start_date: startDateFormat, end_date: endDateFormat, compare_start_date: yearStartDateFormat, compare_end_date: yearEndDateFormat});
+    } else if (document.getElementById('custom').checked == true) {
+        const previousstartDate = new Date(comparisonStartDateSelection);
+        const previousendDate = new Date(comparisonEndDateSelection);
+        const previousStartDateFormat = formatDate(previousstartDate);
+        const previousEndDateFormat = formatDate(previousendDate);
+        addParametersToUrl({start_date: startDateFormat, end_date: endDateFormat, compare_start_date: previousStartDateFormat, compare_end_date: previousEndDateFormat});
+    } else {
+        addParametersToUrl({start_date: startDateFormat, end_date: endDateFormat})
     }
 }
 
-const compareButton = document.getElementById("compare");
 compareButton.addEventListener("click", async() => {
     let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     chrome.scripting.executeScript({
@@ -322,15 +403,7 @@ changes.addEventListener("click", async () => {
     chrome.runtime.sendMessage({ action: "executeStatistieken", tabId: tab.id });
 });
 
-// Update checkbox changes
-const generatePercentChangesCheckbox = document.getElementById('keep-changes-alive');
-chrome.storage.session.get(["changes"]).then((result) => {
-    if (result.changes === true) {
-        generatePercentChangesCheckbox.checked = true;
-    }
-});
-
-// Update dates
+// Keep date selection in session
 const generateDatesCheckbox = document.getElementById('keep-dates-alive');
 chrome.storage.session.get(["dates"]).then(async (result) => {
     if (result.dates === true) {
@@ -351,12 +424,79 @@ chrome.storage.session.get(["dates"]).then(async (result) => {
     }
 });
 
-// Update statistic settings
+generateDatesCheckbox.addEventListener('click', function () {
+    if (generateDatesCheckbox.checked) {
+        checkPermissions('webNavigation').then((result) => {
+            if (result === 'yes') {
+                chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
+                chrome.storage.session.set({ dates: true });
+                chrome.tabs.query({ active: true, currentWindow: true }).then((tab) => {
+                    chrome.runtime.sendMessage({ action: "updatePermissions", tabId: tab.id });
+                });
+            } else {
+                chrome.permissions.request({
+                    permissions: ['webNavigation']
+                }, (granted) => {
+                    if (granted) {
+                        chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
+                        chrome.storage.session.set({ dates: true });
+                        chrome.tabs.query({ active: true, currentWindow: true }).then((tab) => {
+                            chrome.runtime.sendMessage({ action: "updatePermissions", tabId: tab.id });
+                        });
+                    } else {
+                        generateDatesCheckbox.checked = false;
+                    }
+                });
+            }
+        });
+    } else {
+        chrome.storage.session.remove(["dates"]);
+    }
+});
+
+// Show exact metrics above the chart
+const showExactMetricsCheckbox = document.getElementById("show-exact-metrics");
+
 chrome.storage.local.get(["method"]).then((result) => {
     if (result.method === "exact") {
-        document.getElementById("exact").checked = true;
+        showExactMetricsCheckbox.checked = true;
+    }
+});
+
+showExactMetricsCheckbox.addEventListener('click', function () {
+    if (showExactMetricsCheckbox.checked) {
+        checkPermissions('webNavigation').then((result) => {
+            if (result === 'yes') {
+                chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
+                chrome.storage.local.set({ method: "exact" });
+                chrome.tabs.query({ active: true, currentWindow: true }).then((tab) => {
+                    chrome.runtime.sendMessage({ action: "updatePermissions", tabId: tab.id });
+                });
+            } else {
+                chrome.permissions.request({
+                    permissions: ['webNavigation']
+                }, (granted) => {
+                    if (granted) {
+                        chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
+                        chrome.storage.local.set({ method: "exact" });
+                        chrome.tabs.query({ active: true, currentWindow: true }).then((tab) => {
+                            chrome.runtime.sendMessage({ action: "updatePermissions", tabId: tab.id });
+                        });
+                    }
+                });
+            }
+        });
     } else {
-        document.getElementById("rounded").checked = true;
+        chrome.storage.local.remove(["method"]);
+    }
+});
+
+// Generate % changes in session
+const generatePercentChangesCheckbox = document.getElementById('keep-changes-alive-session');
+
+chrome.storage.session.get(["changes"]).then((result) => {
+    if (result.changes === true) {
+        generatePercentChangesCheckbox.checked = true;
     }
 });
 
@@ -390,12 +530,21 @@ generatePercentChangesCheckbox.addEventListener('click', function () {
     }
 });
 
-generateDatesCheckbox.addEventListener('click', function () {
-    if (generateDatesCheckbox.checked) {
+// Generate % changes in session
+const generatePercentChangesPermanentCheckbox = document.getElementById('keep-changes-alive-permanent');
+
+chrome.storage.local.get(["changes"]).then((result) => {
+    if (result.changes === true) {
+        generatePercentChangesPermanentCheckbox.checked = true;
+    }
+});
+
+generatePercentChangesPermanentCheckbox.addEventListener('click', function () {
+    if (generatePercentChangesPermanentCheckbox.checked) {
         checkPermissions('webNavigation').then((result) => {
             if (result === 'yes') {
                 chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
-                chrome.storage.session.set({ dates: true });
+                chrome.storage.local.set({ changes: true });
                 chrome.tabs.query({ active: true, currentWindow: true }).then((tab) => {
                     chrome.runtime.sendMessage({ action: "updatePermissions", tabId: tab.id });
                 });
@@ -405,18 +554,18 @@ generateDatesCheckbox.addEventListener('click', function () {
                 }, (granted) => {
                     if (granted) {
                         chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
-                        chrome.storage.session.set({ dates: true });
+                        chrome.storage.local.set({ changes: true });
                         chrome.tabs.query({ active: true, currentWindow: true }).then((tab) => {
                             chrome.runtime.sendMessage({ action: "updatePermissions", tabId: tab.id });
                         });
                     } else {
-                        generateDatesCheckbox.checked = false;
+                        generatePercentChangesPermanentCheckbox.checked = false;
                     }
                 });
             }
         });
     } else {
-        chrome.storage.session.remove(["dates"]);
+        chrome.storage.local.remove(["changes"]);
     }
 });
 
@@ -522,35 +671,6 @@ loginButton.onclick = function() {
     let password_value = document.getElementById("inputAPI").value;
     let location_value = document.getElementById("search-location").value;
     let language_value = document.getElementById("search-language").value;
-
-    let percentage_value = document.getElementById("exact").checked;
-    if (percentage_value === true) {
-        checkPermissions('webNavigation').then((result) => {
-            if (result === 'yes') {
-                chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
-                chrome.storage.local.set({ method: "exact" });
-                chrome.tabs.query({ active: true, currentWindow: true }).then((tab) => {
-                    chrome.runtime.sendMessage({ action: "updatePermissions", tabId: tab.id });
-                });
-            } else {
-                chrome.permissions.request({
-                    permissions: ['webNavigation']
-                }, (granted) => {
-                    if (granted) {
-                        chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
-                        chrome.storage.local.set({ method: "exact" });
-                        chrome.tabs.query({ active: true, currentWindow: true }).then((tab) => {
-                            chrome.runtime.sendMessage({ action: "updatePermissions", tabId: tab.id });
-                        });
-                    } else {
-                        document.getElementById("rounded").checked = true;
-                    }
-                });
-            }
-        });
-    } else {
-        chrome.storage.local.remove(["method"]);
-    }
 
     if (rememberme.checked) {
         chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });

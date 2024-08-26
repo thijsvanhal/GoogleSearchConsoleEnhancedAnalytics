@@ -231,3 +231,16 @@ strong {
     font-family: madabold;
     color: rgb(33, 37, 41);
 }
+
+.preset-button.unit {
+    margin-top: 20px;
+    background-color: var(--color-bg-default);
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 5px;
+}
+.preset-button.unit:hover {
+    border: 1px solid #02343f !important;
+    background-color: #f1f1f1;
+    cursor: pointer;
+}

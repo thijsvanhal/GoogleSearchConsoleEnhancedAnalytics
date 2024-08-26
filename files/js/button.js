@@ -1,6 +1,11 @@
-checkCurrentPageButton();
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.backgroundMethod) {
+        let backgroundMethod = request.backgroundMethod;
+        checkCurrentPageButton(backgroundMethod);
+    }
+});
 
-async function checkCurrentPageButton() {
+async function checkCurrentPageButton(backgroundMethod) {
     let paginas = document.querySelectorAll('.zQTmif');
     latestPagina = paginas[paginas.length - 1];
     let currentURL = window.location.href;
@@ -13,10 +18,9 @@ async function checkCurrentPageButton() {
     if (currentURL.includes('/search-console/performance/search-analytics')) {
         if (currentURL.includes('compare_date') || currentURL.includes('compare_start_date')) {
             generateButton("compare");
-        } else {
+        } else if (backgroundMethod == 'volume') {
             generateButton("single");
         }
-        
     }
 }
 

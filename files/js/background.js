@@ -12,7 +12,6 @@ function setupListeners() {
             };
             chrome.webNavigation.onCompleted.addListener(async (details) => {
                 let tabId = details.tabId;
-            
                 chrome.storage.session.get(["changes"], async (result) => {
                     if (result.changes === true) {
                         chrome.scripting.executeScript({
@@ -22,6 +21,22 @@ function setupListeners() {
                         chrome.scripting.executeScript({
                             target: { tabId: tabId },
                             files: ['/files/js/xlsx.js', '/files/js/button.js'],
+                        }, () => {
+                            chrome.tabs.sendMessage(tabId, { backgroundMethod: 'comparison' });
+                        });
+                    }
+                });
+                chrome.storage.local.get(["changes"], async (result) => {
+                    if (result.changes === true) {
+                        chrome.scripting.executeScript({
+                            target: { tabId: tabId },
+                            files: ['/files/js/statistieken.js'],
+                        });
+                        chrome.scripting.executeScript({
+                            target: { tabId: tabId },
+                            files: ['/files/js/xlsx.js', '/files/js/button.js'],
+                        }, () => {
+                            chrome.tabs.sendMessage(tabId, { backgroundMethod: 'comparison' });
                         });
                     }
                 });
@@ -54,6 +69,22 @@ function setupListeners() {
                         chrome.scripting.executeScript({
                             target: { tabId: tabId },
                             files: ['/files/js/xlsx.js', '/files/js/button.js'],
+                        }, () => {
+                            chrome.tabs.sendMessage(tabId, { backgroundMethod: 'comparison' });
+                        });
+                    }
+                });
+                chrome.storage.local.get(["changes"], async (result) => {
+                    if (result.changes === true) {
+                        chrome.scripting.executeScript({
+                            target: { tabId: tabId },
+                            files: ['/files/js/statistieken.js'],
+                        });
+                        chrome.scripting.executeScript({
+                            target: { tabId: tabId },
+                            files: ['/files/js/xlsx.js', '/files/js/button.js'],
+                        }, () => {
+                            chrome.tabs.sendMessage(tabId, { backgroundMethod: 'comparison' });
                         });
                     }
                 });
@@ -101,6 +132,13 @@ chrome.runtime.onMessage.addListener(async (message, sender) => {
             target: { tabId: message.tabId },
             files: ['/files/js/zoekvolumes.js'],
         });
+        chrome.scripting.executeScript({
+            target: { tabId: message.tabId },
+            files: ['/files/js/xlsx.js', '/files/js/button.js'],
+        }, () => {
+            chrome.tabs.sendMessage(message.tabId, { backgroundMethod: 'volume' });
+        });
+
         chrome.scripting.executeScript({
             target: { tabId: message.tabId },
             files: ['/files/js/xlsx.js', '/files/js/button.js'],
