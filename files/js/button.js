@@ -18,7 +18,7 @@ async function checkCurrentPageButton(backgroundMethod) {
     if (currentURL.includes('/search-console/performance/search-analytics')) {
         if (currentURL.includes('compare_date') || currentURL.includes('compare_start_date')) {
             generateButton("compare");
-        } else if (backgroundMethod == 'volume') {
+        } else if (backgroundMethod == 'button') {
             generateButton("single");
         }
     }

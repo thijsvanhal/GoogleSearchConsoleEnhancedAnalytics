@@ -126,6 +126,8 @@ chrome.runtime.onMessage.addListener(async (message, sender) => {
         chrome.scripting.executeScript({
             target: { tabId: message.tabId },
             files: ['/files/js/xlsx.js', '/files/js/button.js'],
+        }, () => {
+            chrome.tabs.sendMessage(message.tabId, { backgroundMethod: 'button' });
         });
     } else if (message.action === "executeVolume") {
         chrome.scripting.executeScript({
@@ -136,7 +138,7 @@ chrome.runtime.onMessage.addListener(async (message, sender) => {
             target: { tabId: message.tabId },
             files: ['/files/js/xlsx.js', '/files/js/button.js'],
         }, () => {
-            chrome.tabs.sendMessage(message.tabId, { backgroundMethod: 'volume' });
+            chrome.tabs.sendMessage(message.tabId, { backgroundMethod: 'button' });
         });
 
         chrome.scripting.executeScript({
