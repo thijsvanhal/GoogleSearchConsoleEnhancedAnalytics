@@ -185,12 +185,14 @@ const picker = new easepick.create({
 // Event listeners
 const customComparisonElement = document.getElementById("datepickercomparison");
 const compareButton = document.getElementById("compare"); 
+const patternCheckbox = document.querySelector(".pattern-checkbox");
 
 const customSelectionElement = document.getElementById("custom");
 customSelectionElement.addEventListener("click", function() {
     if (customSelectionElement.checked == true) {
         customComparisonElement.removeAttribute("disabled");
         compareButton.innerText = 'Compare date range';
+        patternCheckbox.style.display = 'none';
     } else {
         customComparisonElement.setAttribute("disabled", "disabled");
     }
@@ -201,6 +203,9 @@ previousSelectionElement.addEventListener("click", function() {
     if (previousSelectionElement.checked == true) {
         customComparisonElement.setAttribute("disabled", "disabled");
         compareButton.innerText = 'Compare date range';
+        patternCheckbox.style.display = 'inline-block';
+    } else {
+        patternCheckbox.style.display = 'none';
     }
 });
 
@@ -209,6 +214,9 @@ yearSelectionElement.addEventListener("click", function() {
     if (yearSelectionElement.checked == true) {
         customComparisonElement.setAttribute("disabled", "disabled");
         compareButton.innerText = 'Compare date range';
+        patternCheckbox.style.display = 'inline-block';
+    } else {
+        patternCheckbox.style.display = 'none';
     }
 });
 
@@ -300,11 +308,69 @@ function formatDate(date) {
     return year + month + day;
 }
 
+// Add these helper functions before customSelection()
+function getPatternMatchedDateYear(currentDate) {
+    // Existing function renamed - matches same day pattern from previous year
+    const dayOfWeek = currentDate.getDay();
+    
+    // Create date for previous year, same month
+    const prevYear = new Date(currentDate);
+    prevYear.setFullYear(currentDate.getFullYear() - 1);
+    
+    // Count total occurrences of this weekday in both months
+    function countWeekdaysInMonth(date, targetDay) {
+        const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+        const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        let count = Math.floor((lastDay.getDate() - (firstDay.getDay() > targetDay ? 
+            7 - (firstDay.getDay() - targetDay) : 
+            targetDay - firstDay.getDay())) / 7) + 1;
+        return count;
+    }
+    
+    const prevWeekdayCount = countWeekdaysInMonth(prevYear, dayOfWeek);
+    
+    // Find which occurrence of the weekday we're on in the current month
+    const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    let weekNumber = Math.ceil((currentDate.getDate() - 
+        (dayOfWeek - firstDayOfMonth.getDay() + 7) % 7) / 7);
+    
+    // Adjust if we're in the last week and months have different number of occurrences
+    if (weekNumber > prevWeekdayCount) {
+        weekNumber = prevWeekdayCount;
+    }
+    
+    // Calculate the matching date in previous year
+    const firstDayPrevYear = new Date(prevYear.getFullYear(), prevYear.getMonth(), 1);
+    let matchingDate = 1 + ((dayOfWeek - firstDayPrevYear.getDay() + 7) % 7);
+    matchingDate += (weekNumber - 1) * 7;
+    
+    prevYear.setDate(matchingDate);
+    return prevYear;
+}
+
+function getPatternMatchedDatePrevious(currentDate, startDate, endDate) {
+    // Matches same day pattern from previous period
+    const dayOfWeek = currentDate.getDay();
+    const periodLength = endDate - startDate;
+    
+    // Create date for previous period
+    const prevPeriod = new Date(currentDate.getTime() - periodLength);
+    
+    // Find the same weekday in the previous period
+    while (prevPeriod.getDay() !== dayOfWeek) {
+        prevPeriod.setDate(prevPeriod.getDate() + 1);
+    }
+    
+    return prevPeriod;
+}
+
+// Update the customSelection function's pattern matching section
 function customSelection() {
     const startDate = new Date(startDateSelection);
     const endDate = new Date(endDateSelection);
     const startDateFormat = formatDate(startDate);
     const endDateFormat = formatDate(endDate);
+    const patternChecked = document.getElementById('pattern').checked;
 
     let previousStartDate, previousEndDate, yearStartDate, yearEndDate;
 
@@ -361,6 +427,13 @@ function customSelection() {
         if (previousStartDate < beginDate) {
             warning_text.innerHTML = `Your comparison start date is before ${beginDateString} (max. start date in Google Search Console) , you will not see all your data.`;
         }
+        
+        if (patternChecked) {
+            // Use previous period pattern matching
+            previousStartDate = getPatternMatchedDatePrevious(startDate, startDate, endDate);
+            previousEndDate = getPatternMatchedDatePrevious(endDate, startDate, endDate);
+        }
+        
         const previousStartDateFormat = formatDate(previousStartDate);
         const previousEndDateFormat = formatDate(previousEndDate);
         addParametersToUrl({start_date: startDateFormat, end_date: endDateFormat, compare_start_date: previousStartDateFormat, compare_end_date: previousEndDateFormat});
@@ -372,7 +445,14 @@ function customSelection() {
         } else if (keuze === 'This month' && today.getDate() === 1 || keuze === 'This month' && today.getDate() === 2) {
             warning_text.innerHTML = "This extension sets the end date 2 days in the past to be sure Google Search Console shows data. This comparison is not possible, try again the third of the month.";
             return;
-        };
+        }
+        
+        if (patternChecked) {
+            // Use year pattern matching
+            yearStartDate = getPatternMatchedDateYear(startDate);
+            yearEndDate = getPatternMatchedDateYear(endDate);
+        }
+        
         const yearStartDateFormat = formatDate(yearStartDate);
         const yearEndDateFormat = formatDate(yearEndDate);
         addParametersToUrl({start_date: startDateFormat, end_date: endDateFormat, compare_start_date: yearStartDateFormat, compare_end_date: yearEndDateFormat});
@@ -382,6 +462,7 @@ function customSelection() {
         const previousStartDateFormat = formatDate(previousstartDate);
         const previousEndDateFormat = formatDate(previousendDate);
         addParametersToUrl({start_date: startDateFormat, end_date: endDateFormat, compare_start_date: previousStartDateFormat, compare_end_date: previousEndDateFormat});
+        patternCheckbox.style.display = 'none';
     } else {
         addParametersToUrl({start_date: startDateFormat, end_date: endDateFormat})
     }
