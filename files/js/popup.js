@@ -432,6 +432,11 @@ function customSelection() {
             // Use previous period pattern matching
             previousStartDate = getPatternMatchedDatePrevious(startDate, startDate, endDate);
             previousEndDate = getPatternMatchedDatePrevious(endDate, startDate, endDate);
+
+            if (previousEndDate.getTime() >= startDate.getTime()) {
+                previousStartDate.setDate(previousStartDate.getDate() - 7);
+                previousEndDate.setDate(previousEndDate.getDate() - 7);
+            }
         }
         
         const previousStartDateFormat = formatDate(previousStartDate);
