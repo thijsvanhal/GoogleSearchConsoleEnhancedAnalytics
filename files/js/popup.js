@@ -27,7 +27,6 @@ function addParametersToUrl(params) {
         chrome.storage.session.remove(["compareStartDate"]);
         chrome.storage.session.remove(["compareEndDate"]);
     }
-    document.getElementById('keep-dates-alive').disabled = false;
     keuze = '';
 }
 
@@ -487,57 +486,6 @@ const changes = document.getElementById('generate-changes');
 changes.addEventListener("click", async () => {
     let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     chrome.runtime.sendMessage({ action: "executeStatistieken", tabId: tab.id });
-});
-
-// Keep date selection in session
-const generateDatesCheckbox = document.getElementById('keep-dates-alive');
-chrome.storage.session.get(["dates"]).then(async (result) => {
-    if (result.dates === true) {
-        const startDateString = await chrome.storage.session.get("startDate");
-        const endDateString = await chrome.storage.session.get("endDate");
-
-        const startDateYear = startDateString.startDate.slice(0, 4);
-        const startDateMonth = startDateString.startDate.slice(4, 6);
-        const startDateDay = startDateString.startDate.slice(6, 8);
-
-        const endDateYear = endDateString.endDate.slice(0, 4);
-        const endDateMonth = endDateString.endDate.slice(4, 6);
-        const endDateDay = endDateString.endDate.slice(6, 8);
-
-        document.getElementById('datepicker').value = `${startDateYear}-${startDateMonth}-${startDateDay} - ${endDateYear}-${endDateMonth}-${endDateDay}`;
-        generateDatesCheckbox.checked = true;
-        generateDatesCheckbox.disabled = false;
-    }
-});
-
-generateDatesCheckbox.addEventListener('click', function () {
-    if (generateDatesCheckbox.checked) {
-        checkPermissions('webNavigation').then((result) => {
-            if (result === 'yes') {
-                chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
-                chrome.storage.session.set({ dates: true });
-                chrome.tabs.query({ active: true, currentWindow: true }).then((tab) => {
-                    chrome.runtime.sendMessage({ action: "updatePermissions", tabId: tab.id });
-                });
-            } else {
-                chrome.permissions.request({
-                    permissions: ['webNavigation']
-                }, (granted) => {
-                    if (granted) {
-                        chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
-                        chrome.storage.session.set({ dates: true });
-                        chrome.tabs.query({ active: true, currentWindow: true }).then((tab) => {
-                            chrome.runtime.sendMessage({ action: "updatePermissions", tabId: tab.id });
-                        });
-                    } else {
-                        generateDatesCheckbox.checked = false;
-                    }
-                });
-            }
-        });
-    } else {
-        chrome.storage.session.remove(["dates"]);
-    }
 });
 
 // Show exact metrics above the chart

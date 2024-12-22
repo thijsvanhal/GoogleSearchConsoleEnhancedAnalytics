@@ -40,14 +40,6 @@ function setupListeners() {
                         });
                     }
                 });
-                chrome.storage.session.get(["dates"], async (result) => {
-                    if (result.dates === true) {
-                        chrome.scripting.executeScript({
-                            target: { tabId: tabId },
-                            files: ['/files/js/datum.js'],
-                        })
-                    }
-                });
                 chrome.storage.local.get(["method"], async (result) => {
                     if (result.method === "exact") {
                         chrome.scripting.executeScript({
@@ -91,14 +83,6 @@ function setupListeners() {
                         }, () => {
                             chrome.tabs.sendMessage(tabId, { backgroundMethod: 'comparison' });
                         });
-                    }
-                });
-                chrome.storage.session.get(["dates"], async (result) => {
-                    if (result.dates === true) {
-                        chrome.scripting.executeScript({
-                            target: { tabId: tabId },
-                            files: ['/files/js/datum.js'],
-                        })
                     }
                 });
                 chrome.storage.local.get(["method"], async (result) => {
