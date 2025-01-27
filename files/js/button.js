@@ -62,7 +62,10 @@ async function generateExcelWhenSingle() {
         summaryElements.push(element.innerText.trim());
     });
 
-    const currentPeriod = latestPagina.querySelectorAll('.OTrxGf')[1].innerText.trim();
+    const DateElementsGraph = document.querySelectorAll('.PvhD9 .V67aGc tspan');
+    const firstDate = DateElementsGraph[0].innerHTML;
+    const lastDate = DateElementsGraph[DateElementsGraph.length - 1].innerHTML;
+    const currentPeriod = `${firstDate} - ${lastDate}`;
 
     const wb = XLSX.utils.book_new();
 
