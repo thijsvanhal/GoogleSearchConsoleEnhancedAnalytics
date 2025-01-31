@@ -78,7 +78,7 @@ const aMaandStart = startDate.setMonth(today.getMonth() - 1, 1);
 const aMaandEnd = endDate.setDate(0);
 
 endDate = new Date(today);
-const dKwartaalStart = startDate.setMonth(currentQuarter * 3, 1);
+const dKwartaalStart = startDate.setFullYear(today.getFullYear(), currentQuarter * 3, 1);
 const dKwartaalEnd = endDate.setDate(today.getDate() - 2);
 
 endDate = new Date(today);
@@ -94,7 +94,7 @@ if (lastQuarter === -1) {
 }
 
 endDate = new Date(today);
-let dJaarStart = startDate.setMonth(0, 1);
+let dJaarStart = startDate.setFullYear(today.getFullYear(), 0, 1);
 let dJaarEnd = endDate.setDate(today.getDate() - 2);
 
 let startDateSelection;
