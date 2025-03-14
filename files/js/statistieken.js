@@ -10,7 +10,7 @@ async function checkCurrentPage() {
         latestPagina = paginas[paginas.length - 1];
         currentURL = window.location.href;
     }
-    if (currentURL.includes('compare_date') || currentURL.includes('compare_start_date')) {
+    if (currentURL.includes('compare_date') || currentURL.includes('compare_start_date') || currentURL.includes('compare_query') || currentURL.includes('compare_page') || currentURL.includes('compare_country') || currentURL.includes('compare_device') || currentURL.includes('compare_sap')) {
         processStatistics();
     }
 }
