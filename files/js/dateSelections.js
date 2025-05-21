@@ -74,7 +74,7 @@ async function handleDateSelection(event) {
 // async function to create a date selection button
 async function createDateButton(text, selection) {
     const button = document.createElement('button');
-    button.className = 'f8nwhd-qb23S-b9nz9e f8nwhd-qb23S-b9nz9e-OWXEXe-uqeOfd f8nwhd-qb23S-b9nz9e-OWXEXe-SfQLQb-V67aGc-YuD1xf PqfI6e';
+    button.className = 'sjAOyb SGXFxe s0TU8c PuUf9b PqfI6e';
     button.setAttribute('jscontroller', 'Wh3DYd');
     button.setAttribute('jsaction', 'click:mgNc5d;');
     button.setAttribute('role', 'radio');
@@ -84,19 +84,19 @@ async function createDateButton(text, selection) {
     button.setAttribute('data-tooltip-enabled', 'false');
 
     const innerDiv = document.createElement('div');
-    innerDiv.className = 'f8nwhd-qb23S-b9nz9e-bN97Pc';
-    innerDiv.setAttribute('jsname', 'mIYO1');
+    innerDiv.className = 'MCyFjf';
+    innerDiv.setAttribute('jsname', 'bN97Pc');
 
     // Create main text span
     const mainSpan = document.createElement('span');
-    mainSpan.className = 'f8nwhd-qb23S-b9nz9e-ma6Yeb-pbTTYe';
+    mainSpan.className = 'Uxkgyf';
     
     const iconSpan = document.createElement('span');
-    iconSpan.className = 'f8nwhd-qb23S-b9nz9e-L6cTce-LAtFrd-haAclf';
+    iconSpan.className = 'n3aiU';
     
     const textSpan = document.createElement('span');
-    textSpan.className = 'f8nwhd-qb23S-b9nz9e-V67aGc';
-    textSpan.setAttribute('jsname', 'CshRh');
+    textSpan.className = 'GzDMwf';
+    textSpan.setAttribute('jsname', 'V67aGc');
     textSpan.textContent = text;
 
     mainSpan.appendChild(iconSpan);
@@ -104,14 +104,14 @@ async function createDateButton(text, selection) {
 
     // Create checkmark span
     const checkSpan = document.createElement('span');
-    checkSpan.className = 'f8nwhd-qb23S-b9nz9e-cGMI2b-pbTTYe';
+    checkSpan.className = 'pDSnLd';
     
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.setAttribute('class', 'f8nwhd-qb23S-kBDsod f8nwhd-qb23S-b9nz9e-qE2ISc');
+    svg.setAttribute('class', 'DaraKe v3ey5');
     svg.setAttribute('viewBox', '0 0 18 18');
     
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('class', 'f8nwhd-qb23S-b9nz9e-qE2ISc-Jt5cK');
+    path.setAttribute('class', 'KZT3Q');
     path.setAttribute('fill', 'none');
     path.setAttribute('d', 'M3 9.23529L6.84 13L15 5');
     
@@ -119,8 +119,8 @@ async function createDateButton(text, selection) {
     checkSpan.appendChild(svg);
 
     const hiddenSpan = document.createElement('span');
-    hiddenSpan.className = 'f8nwhd-qb23S-b9nz9e-V67aGc';
-    hiddenSpan.setAttribute('jsname', 'CshRh');
+    hiddenSpan.className = 'GzDMwf';
+    hiddenSpan.setAttribute('jsname', 'V67aGc');
     hiddenSpan.setAttribute('aria-hidden', 'true');
     hiddenSpan.style.visibility = 'hidden';
     hiddenSpan.textContent = text;
@@ -133,26 +133,21 @@ async function createDateButton(text, selection) {
 
     // Add additional spans for styling
     const spans = [
-        'RBHQF-ksKsZd',
-        'f8nwhd-qb23S-b9nz9e-clz4Ic',
-        'f8nwhd-qb23S-b9nz9e-i5vt6e',
-        'f8nwhd-qb23S-b9nz9e-dgl2Hf'
+        { class: 'RBHQF-ksKsZd', attrs: { jscontroller: 'LBaJxb', jsname: 'ksKsZd', 'soy-skip': '', ssk: '6:RWVI5c' } },
+        { class: 'UiRurc', attrs: {} },
+        { class: 'TPi3n', attrs: {} },
+        { class: 'OiePBf-zPjgPe OFiDV', attrs: {} },
+        { class: 'iqf3Db', attrs: {} }
     ];
 
-    spans.forEach(className => {
+    spans.forEach(spanInfo => {
         const span = document.createElement('span');
-        span.className = className;
-        if (className === 'RBHQF-ksKsZd') {
-            span.setAttribute('jscontroller', 'LBaJxb');
-            span.setAttribute('jsname', 'ht0y9e');
-            span.setAttribute('soy-skip', '');
-            span.setAttribute('ssk', '6:RWVI5c');
+        span.className = spanInfo.class;
+        
+        for (const [key, value] of Object.entries(spanInfo.attrs)) {
+            span.setAttribute(key, value);
         }
-        if (className === 'f8nwhd-qb23S-b9nz9e-i5vt6e') {
-            const innerSpan = document.createElement('span');
-            innerSpan.className = 'OiePBf-zPjgPe';
-            span.appendChild(innerSpan);
-        }
+        
         button.appendChild(span);
     });
     
@@ -185,11 +180,11 @@ async function addCustomDateSelections() {
     customRow.style.marginTop = '-25px';
 
     const innerContainer = document.createElement('div');
-    innerContainer.className = 'cpc7gb';
+    innerContainer.className = 'cpc7gb urNrd';
     innerContainer.setAttribute('role', 'radiogroup');
 
     const buttonContainer = document.createElement('div');
-    buttonContainer.className = 'f8nwhd-qb23S-LgbsSe';
+    buttonContainer.className = 'W6BWO';
 
     const buttonWrapper = document.createElement('div');
     buttonWrapper.className = 'SjPuUc';
@@ -229,7 +224,6 @@ async function addCustomDateSelections() {
 
     // Insert the flex container as the first child
     filterContainer.insertBefore(flexContainer, filterContainer.firstChild);
-
 }
 
 // Format date for GSC
