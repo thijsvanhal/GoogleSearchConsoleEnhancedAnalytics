@@ -80,6 +80,9 @@ async function createDateButton(text, selection) {
     button.setAttribute('role', 'radio');
     button.setAttribute('aria-checked', 'false');
     button.setAttribute('tabindex', '-1');
+    button.setAttribute('jscallback', 'w6x4Ud:j5Lj1e:w6x4Ud');
+    button.setAttribute('jsname', `custom-${selection}`);
+    button.setAttribute('aria-describedby', '');
     button.setAttribute('data-selection', selection);
     button.setAttribute('data-tooltip-enabled', 'false');
 
@@ -181,10 +184,14 @@ async function addCustomDateSelections() {
 
     const innerContainer = document.createElement('div');
     innerContainer.className = 'cpc7gb urNrd';
+    innerContainer.setAttribute('aria-label', 'Select time range');
+    innerContainer.setAttribute('jsname', 'AYhXyf');
     innerContainer.setAttribute('role', 'radiogroup');
+    innerContainer.setAttribute('jscontroller', 'j5Lj1e');
+    innerContainer.setAttribute('jsaction', 'keydown:uYT2Vb;juE4lf:zMLirc');
 
     const buttonContainer = document.createElement('div');
-    buttonContainer.className = 'W6BWO';
+    buttonContainer.className = 'vAOPLd';
 
     const buttonWrapper = document.createElement('div');
     buttonWrapper.className = 'SjPuUc';
