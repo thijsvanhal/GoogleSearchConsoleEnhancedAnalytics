@@ -74,7 +74,7 @@ async function handleDateSelection(event) {
 // async function to create a date selection button
 async function createDateButton(text, selection) {
     const button = document.createElement('button');
-    button.className = 'sjAOyb SGXFxe s0TU8c PuUf9b PqfI6e';
+    button.className = 'NFefP Wpq2De eNoTpc ye5sjb xRD1ad PqfI6e';
     button.setAttribute('jscontroller', 'Wh3DYd');
     button.setAttribute('jsaction', 'click:mgNc5d;');
     button.setAttribute('role', 'radio');
@@ -85,20 +85,21 @@ async function createDateButton(text, selection) {
     button.setAttribute('aria-describedby', '');
     button.setAttribute('data-selection', selection);
     button.setAttribute('data-tooltip-enabled', 'false');
+    button.style.height = '35px';
 
     const innerDiv = document.createElement('div');
-    innerDiv.className = 'MCyFjf';
+    innerDiv.className = 'pFIhBf';
     innerDiv.setAttribute('jsname', 'bN97Pc');
 
     // Create main text span
     const mainSpan = document.createElement('span');
-    mainSpan.className = 'Uxkgyf';
+    mainSpan.className = 'GzOjQd';
     
     const iconSpan = document.createElement('span');
-    iconSpan.className = 'n3aiU';
+    iconSpan.className = 'yNqz1d';
     
     const textSpan = document.createElement('span');
-    textSpan.className = 'GzDMwf';
+    textSpan.className = 'zpP41';
     textSpan.setAttribute('jsname', 'V67aGc');
     textSpan.textContent = text;
 
@@ -107,14 +108,14 @@ async function createDateButton(text, selection) {
 
     // Create checkmark span
     const checkSpan = document.createElement('span');
-    checkSpan.className = 'pDSnLd';
+    checkSpan.className = 'Ror6Pd';
     
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.setAttribute('class', 'DaraKe v3ey5');
+    svg.setAttribute('class', 'LwqEnc i6xwTe');
     svg.setAttribute('viewBox', '0 0 18 18');
     
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('class', 'KZT3Q');
+    path.setAttribute('class', 'oWQJxf');
     path.setAttribute('fill', 'none');
     path.setAttribute('d', 'M3 9.23529L6.84 13L15 5');
     
@@ -122,7 +123,7 @@ async function createDateButton(text, selection) {
     checkSpan.appendChild(svg);
 
     const hiddenSpan = document.createElement('span');
-    hiddenSpan.className = 'GzDMwf';
+    hiddenSpan.className = 'zpP41';
     hiddenSpan.setAttribute('jsname', 'V67aGc');
     hiddenSpan.setAttribute('aria-hidden', 'true');
     hiddenSpan.style.visibility = 'hidden';
@@ -137,10 +138,10 @@ async function createDateButton(text, selection) {
     // Add additional spans for styling
     const spans = [
         { class: 'RBHQF-ksKsZd', attrs: { jscontroller: 'LBaJxb', jsname: 'ksKsZd', 'soy-skip': '', ssk: '6:RWVI5c' } },
-        { class: 'UiRurc', attrs: {} },
-        { class: 'TPi3n', attrs: {} },
-        { class: 'OiePBf-zPjgPe OFiDV', attrs: {} },
-        { class: 'iqf3Db', attrs: {} }
+        { class: 'dbyZPc', attrs: {} },
+        { class: 'IAgCwf', attrs: {} },
+        { class: 'OiePBf-zPjgPe rrcXsb', attrs: {} },
+        { class: 'fnsaue', attrs: {} }
     ];
 
     spans.forEach(spanInfo => {
@@ -190,9 +191,6 @@ async function addCustomDateSelections() {
     innerContainer.setAttribute('jscontroller', 'j5Lj1e');
     innerContainer.setAttribute('jsaction', 'keydown:uYT2Vb;juE4lf:zMLirc');
 
-    const buttonContainer = document.createElement('div');
-    buttonContainer.className = 'vAOPLd';
-
     const buttonWrapper = document.createElement('div');
     buttonWrapper.className = 'SjPuUc';
 
@@ -210,8 +208,7 @@ async function addCustomDateSelections() {
         buttonWrapper.appendChild(button);
     }
 
-    buttonContainer.appendChild(buttonWrapper);
-    innerContainer.appendChild(buttonContainer);
+    innerContainer.appendChild(buttonWrapper);
     customRow.appendChild(innerContainer);
     
     // Add both rows to the flex container
