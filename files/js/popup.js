@@ -20,13 +20,27 @@ function addParametersToUrl(params) {
     chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
     chrome.storage.session.set({ startDate: params.start_date });
     chrome.storage.session.set({ endDate: params.end_date });
-    if (params.compare_start_date) {
+    
+    // Get the current comparison method
+    const comparisonMethod = document.getElementById('previous').checked ? 'previous' : 
+                           document.getElementById('year').checked ? 'year' : 
+                           document.getElementById('custom').checked ? 'custom' : 'none';
+    
+    // Only save custom comparison dates if the method is actually "custom"
+    if (params.compare_start_date && comparisonMethod === 'custom') {
         chrome.storage.session.set({ compareStartDate: params.compare_start_date });
         chrome.storage.session.set({ compareEndDate: params.compare_end_date });
     } else {
         chrome.storage.session.remove(["compareStartDate"]);
         chrome.storage.session.remove(["compareEndDate"]);
     }
+    
+    // Save the current comparison method, preset choice, and pattern checkbox state
+    const patternChecked = document.getElementById('pattern').checked;
+    chrome.storage.session.set({ comparisonMethod: comparisonMethod });
+    chrome.storage.session.set({ presetChoice: keuze });
+    chrome.storage.session.set({ patternChecked: patternChecked });
+    
     keuze = '';
 }
 
@@ -141,6 +155,9 @@ const picker = new easepick.create({
                 presetContainer.appendChild(column2);
             }
         });
+
+        // Restore saved dates when picker is ready
+        restoreSavedDates(picker);
     },
     zIndex: 10,
     LockPlugin: {
@@ -230,6 +247,9 @@ const pickerComparison = new easepick.create({
             comparisonStartDateSelection = e.detail.start;
             comparisonEndDateSelection = e.detail.end;
         });
+
+        // Restore saved comparison dates when picker is ready
+        restoreSavedComparisonDates(picker);
     },
     zIndex: 10,
     LockPlugin: {
@@ -252,6 +272,93 @@ const pickerComparison = new easepick.create({
     ]
 })
 pickerComparison.ui.container.style.marginLeft = "-80px";
+
+// Function to restore saved dates from storage
+async function restoreSavedDates(picker) {
+    try {
+        const result = await chrome.storage.session.get(['startDate', 'endDate']);
+        if (result.startDate && result.endDate) {
+            // Convert stored date format (YYYYMMDD) to Date objects
+            const startDate = parseDateFromStorage(result.startDate);
+            const endDate = parseDateFromStorage(result.endDate);
+            
+            if (startDate && endDate) {
+                // Set the picker to show these dates
+                picker.setStartDate(startDate);
+                picker.setEndDate(endDate);
+                
+                // Update the global variables
+                startDateSelection = startDate;
+                endDateSelection = endDate;
+                
+                // Update the input display
+                const startDateStr = formatDateForDisplay(startDate);
+                const endDateStr = formatDateForDisplay(endDate);
+                document.getElementById('datepicker').value = `${startDateStr} - ${endDateStr}`;
+                
+                // Update button text to indicate dates are ready for comparison
+                compareButton.innerText = 'Compare date range';
+            }
+        }
+    } catch (error) {
+        console.log('No saved dates found or error restoring dates:', error);
+    }
+}
+
+// Function to restore saved comparison dates from storage
+async function restoreSavedComparisonDates(picker) {
+    try {
+        const result = await chrome.storage.session.get(['compareStartDate', 'compareEndDate', 'comparisonMethod']);
+        
+        // Only restore custom comparison dates if the saved method is "custom"
+        if (result.compareStartDate && result.compareEndDate && result.comparisonMethod === 'custom') {
+            // Convert stored date format (YYYYMMDD) to Date objects
+            const compareStartDate = parseDateFromStorage(result.compareStartDate);
+            const compareEndDate = parseDateFromStorage(result.compareEndDate);
+            
+            if (compareStartDate && compareEndDate) {
+                // Set the comparison picker to show these dates
+                picker.setStartDate(compareStartDate);
+                picker.setEndDate(compareEndDate);
+                
+                // Update the global variables
+                comparisonStartDateSelection = compareStartDate;
+                comparisonEndDateSelection = compareEndDate;
+                
+                // Update the input display
+                const startDateStr = formatDateForDisplay(compareStartDate);
+                const endDateStr = formatDateForDisplay(compareEndDate);
+                document.getElementById('datepickercomparison').value = `${startDateStr} - ${endDateStr}`;
+                
+                // Enable the comparison input since custom is selected
+                document.getElementById('datepickercomparison').removeAttribute('disabled');
+                compareButton.innerText = 'Compare date range';
+            }
+        }
+    } catch (error) {
+        console.log('No saved comparison dates found or error restoring comparison dates:', error);
+    }
+}
+
+// Helper function to parse date from storage format (YYYYMMDD) to Date object
+function parseDateFromStorage(dateString) {
+    if (!dateString || dateString.length !== 8) return null;
+    
+    const year = parseInt(dateString.substring(0, 4));
+    const month = parseInt(dateString.substring(4, 6)) - 1; // Month is 0-indexed
+    const day = parseInt(dateString.substring(6, 8));
+    
+    return new Date(year, month, day);
+}
+
+// Helper function to format date for display (MM/DD/YYYY)
+function formatDateForDisplay(date) {
+    if (!date) return '';
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${month}/${day}/${year}`;
+}
 
 let keuze;
 const root = document.querySelector('.easepick-wrapper')
@@ -859,3 +966,48 @@ function checkPermissions(permissions) {
         });
     });
 }
+
+// Initialize saved settings when popup loads
+async function initializeSavedSettings() {
+    try {
+        const result = await chrome.storage.session.get(['comparisonMethod', 'presetChoice', 'patternChecked']);
+        
+        // Restore comparison method selection
+        if (result.comparisonMethod) {
+            const radioButton = document.getElementById(result.comparisonMethod);
+            if (radioButton) {
+                radioButton.checked = true;
+                
+                // Trigger the appropriate UI updates
+                if (result.comparisonMethod === 'custom') {
+                    document.getElementById('datepickercomparison').removeAttribute('disabled');
+                    compareButton.innerText = 'Compare date range';
+                    patternCheckbox.style.display = 'none';
+                } else if (result.comparisonMethod === 'previous' || result.comparisonMethod === 'year') {
+                    document.getElementById('datepickercomparison').setAttribute('disabled', 'disabled');
+                    compareButton.innerText = 'Compare date range';
+                    patternCheckbox.style.display = 'inline-block';
+                }
+            }
+        }
+        
+        // Restore pattern checkbox state
+        if (result.patternChecked !== undefined) {
+            document.getElementById('pattern').checked = result.patternChecked;
+        }
+        
+        // Restore preset choice
+        if (result.presetChoice) {
+            keuze = result.presetChoice;
+        }
+        
+    } catch (error) {
+        console.log('No saved settings found or error restoring settings:', error);
+    }
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Small delay to ensure all elements are ready
+    setTimeout(initializeSavedSettings, 100);
+});
