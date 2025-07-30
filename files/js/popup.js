@@ -561,7 +561,8 @@ function customSelection() {
         if (patternChecked) {
             // Use year pattern matching
             yearStartDate = getPatternMatchedDateYear(startDate);
-            yearEndDate = getPatternMatchedDateYear(endDate);
+            const duration = endDate.getTime() - startDate.getTime();
+            yearEndDate = new Date(yearStartDate.getTime() + duration);
         }
         
         const yearStartDateFormat = formatDate(yearStartDate);

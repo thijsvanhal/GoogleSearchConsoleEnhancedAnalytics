@@ -74,32 +74,30 @@ async function handleDateSelection(event) {
 // async function to create a date selection button
 async function createDateButton(text, selection) {
     const button = document.createElement('button');
-    button.className = 'NFefP Wpq2De eNoTpc ye5sjb xRD1ad PqfI6e';
+    button.className = 'VAKbPe VJmZo pVxgue xW0pm pFqWHe PqfI6e';
     button.setAttribute('jscontroller', 'Wh3DYd');
     button.setAttribute('jsaction', 'click:mgNc5d;');
     button.setAttribute('role', 'radio');
     button.setAttribute('aria-checked', 'false');
     button.setAttribute('tabindex', '-1');
     button.setAttribute('jscallback', 'w6x4Ud:j5Lj1e:w6x4Ud');
-    button.setAttribute('jsname', `custom-${selection}`);
     button.setAttribute('aria-describedby', '');
     button.setAttribute('data-selection', selection);
     button.setAttribute('data-tooltip-enabled', 'false');
-    button.style.height = '35px';
 
     const innerDiv = document.createElement('div');
-    innerDiv.className = 'pFIhBf';
+    innerDiv.className = 'vmjVWb';
     innerDiv.setAttribute('jsname', 'bN97Pc');
 
     // Create main text span
     const mainSpan = document.createElement('span');
-    mainSpan.className = 'GzOjQd';
+    mainSpan.className = 'wwPY5';
     
     const iconSpan = document.createElement('span');
-    iconSpan.className = 'yNqz1d';
+    iconSpan.className = 'GWEJVd';
     
     const textSpan = document.createElement('span');
-    textSpan.className = 'zpP41';
+    textSpan.className = 'HhUn9';
     textSpan.setAttribute('jsname', 'V67aGc');
     textSpan.textContent = text;
 
@@ -108,14 +106,14 @@ async function createDateButton(text, selection) {
 
     // Create checkmark span
     const checkSpan = document.createElement('span');
-    checkSpan.className = 'Ror6Pd';
+    checkSpan.className = 'oOsXNe';
     
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.setAttribute('class', 'LwqEnc i6xwTe');
+    svg.setAttribute('class', 'u8fJAd blFxwc');
     svg.setAttribute('viewBox', '0 0 18 18');
     
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('class', 'oWQJxf');
+    path.setAttribute('class', 'SQAIec');
     path.setAttribute('fill', 'none');
     path.setAttribute('d', 'M3 9.23529L6.84 13L15 5');
     
@@ -123,7 +121,7 @@ async function createDateButton(text, selection) {
     checkSpan.appendChild(svg);
 
     const hiddenSpan = document.createElement('span');
-    hiddenSpan.className = 'zpP41';
+    hiddenSpan.className = 'HhUn9';
     hiddenSpan.setAttribute('jsname', 'V67aGc');
     hiddenSpan.setAttribute('aria-hidden', 'true');
     hiddenSpan.style.visibility = 'hidden';
@@ -138,10 +136,10 @@ async function createDateButton(text, selection) {
     // Add additional spans for styling
     const spans = [
         { class: 'RBHQF-ksKsZd', attrs: { jscontroller: 'LBaJxb', jsname: 'ksKsZd', 'soy-skip': '', ssk: '6:RWVI5c' } },
-        { class: 'dbyZPc', attrs: {} },
-        { class: 'IAgCwf', attrs: {} },
-        { class: 'OiePBf-zPjgPe rrcXsb', attrs: {} },
-        { class: 'fnsaue', attrs: {} }
+        { class: 'RXJWCe', attrs: {} },
+        { class: 'EVb54c', attrs: {} },
+        { class: 'OiePBf-zPjgPe q7iP0c', attrs: {} },
+        { class: 'Sf5AJd', attrs: {} }
     ];
 
     spans.forEach(spanInfo => {
@@ -184,7 +182,7 @@ async function addCustomDateSelections() {
     customRow.style.marginTop = '-25px';
 
     const innerContainer = document.createElement('div');
-    innerContainer.className = 'cpc7gb urNrd';
+    innerContainer.className = 'cpc7gb OhA4E fTiamc';
     innerContainer.setAttribute('aria-label', 'Select time range');
     innerContainer.setAttribute('jsname', 'AYhXyf');
     innerContainer.setAttribute('role', 'radiogroup');
@@ -208,7 +206,10 @@ async function addCustomDateSelections() {
         buttonWrapper.appendChild(button);
     }
 
-    innerContainer.appendChild(buttonWrapper);
+    const wrapperDiv = document.createElement('div');
+    wrapperDiv.className = 'uG4DKd';
+    wrapperDiv.appendChild(buttonWrapper);
+    innerContainer.appendChild(wrapperDiv);
     customRow.appendChild(innerContainer);
     
     // Add both rows to the flex container
