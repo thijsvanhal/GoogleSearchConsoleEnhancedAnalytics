@@ -416,42 +416,25 @@ function formatDate(date) {
 
 // Add these helper functions before customSelection()
 function getPatternMatchedDateYear(currentDate) {
-    // Existing function renamed - matches same day pattern from previous year
-    const dayOfWeek = currentDate.getDay();
+    const targetDayOfWeek = currentDate.getDay();
     
-    // Create date for previous year, same month
-    const prevYear = new Date(currentDate);
-    prevYear.setFullYear(currentDate.getFullYear() - 1);
+    const prevYearDate = new Date(currentDate);
+    prevYearDate.setFullYear(currentDate.getFullYear() - 1);
     
-    // Count total occurrences of this weekday in both months
-    function countWeekdaysInMonth(date, targetDay) {
-        const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-        const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-        let count = Math.floor((lastDay.getDate() - (firstDay.getDay() > targetDay ? 
-            7 - (firstDay.getDay() - targetDay) : 
-            targetDay - firstDay.getDay())) / 7) + 1;
-        return count;
+    const prevYearDayOfWeek = prevYearDate.getDay();
+    
+    let diff = targetDayOfWeek - prevYearDayOfWeek;
+    
+    if (diff > 3) {
+        diff -= 7;
+    }
+    if (diff < -4) { // Adjusted for more intuitive results
+        diff += 7;
     }
     
-    const prevWeekdayCount = countWeekdaysInMonth(prevYear, dayOfWeek);
+    prevYearDate.setDate(prevYearDate.getDate() + diff);
     
-    // Find which occurrence of the weekday we're on in the current month
-    const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-    let weekNumber = Math.ceil((currentDate.getDate() - 
-        (dayOfWeek - firstDayOfMonth.getDay() + 7) % 7) / 7);
-    
-    // Adjust if we're in the last week and months have different number of occurrences
-    if (weekNumber > prevWeekdayCount) {
-        weekNumber = prevWeekdayCount;
-    }
-    
-    // Calculate the matching date in previous year
-    const firstDayPrevYear = new Date(prevYear.getFullYear(), prevYear.getMonth(), 1);
-    let matchingDate = 1 + ((dayOfWeek - firstDayPrevYear.getDay() + 7) % 7);
-    matchingDate += (weekNumber - 1) * 7;
-    
-    prevYear.setDate(matchingDate);
-    return prevYear;
+    return prevYearDate;
 }
 
 function getPatternMatchedDatePrevious(currentDate, startDate, endDate) {
