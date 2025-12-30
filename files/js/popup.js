@@ -1,4 +1,5 @@
-function addParametersToUrl(params) {
+document.addEventListener('DOMContentLoaded', function() {
+    function addParametersToUrl(params) {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         var tab = tabs[0];
         var url = new URL(tab.url);
@@ -203,36 +204,63 @@ const customComparisonElement = document.getElementById("datepickercomparison");
 const compareButton = document.getElementById("compare"); 
 const patternCheckbox = document.querySelector(".pattern-checkbox");
 
-const customSelectionElement = document.getElementById("custom");
-customSelectionElement.addEventListener("click", function() {
-    if (customSelectionElement.checked == true) {
+// Track the last checked radio button for toggle functionality
+let lastCheckedComparison = null;
+
+function updateComparisonUI(comparisonType) {
+    if (comparisonType === 'custom') {
         customComparisonElement.removeAttribute("disabled");
         compareButton.innerText = 'Compare date range';
         patternCheckbox.style.display = 'none';
-    } else {
+    } else if (comparisonType === 'previous' || comparisonType === 'year') {
         customComparisonElement.setAttribute("disabled", "disabled");
+        compareButton.innerText = 'Compare date range';
+        patternCheckbox.style.display = 'inline-block';
+    } else {
+        // No comparison selected
+        customComparisonElement.setAttribute("disabled", "disabled");
+        compareButton.innerText = 'Apply date range';
+        patternCheckbox.style.display = 'none';
+        document.getElementById('datepickercomparison').value = 'Select comparison period';
+    }
+}
+
+const customSelectionElement = document.getElementById("custom");
+customSelectionElement.addEventListener("click", function() {
+    if (lastCheckedComparison === 'custom') {
+        // Deselect if clicking the same option
+        customSelectionElement.checked = false;
+        lastCheckedComparison = null;
+        updateComparisonUI(null);
+    } else {
+        lastCheckedComparison = 'custom';
+        updateComparisonUI('custom');
     }
 });
 
 const previousSelectionElement = document.getElementById("previous");
 previousSelectionElement.addEventListener("click", function() {
-    if (previousSelectionElement.checked == true) {
-        customComparisonElement.setAttribute("disabled", "disabled");
-        compareButton.innerText = 'Compare date range';
-        patternCheckbox.style.display = 'inline-block';
+    if (lastCheckedComparison === 'previous') {
+        // Deselect if clicking the same option
+        previousSelectionElement.checked = false;
+        lastCheckedComparison = null;
+        updateComparisonUI(null);
     } else {
-        patternCheckbox.style.display = 'none';
+        lastCheckedComparison = 'previous';
+        updateComparisonUI('previous');
     }
 });
 
 const yearSelectionElement = document.getElementById("year");
 yearSelectionElement.addEventListener("click", function() {
-    if (yearSelectionElement.checked == true) {
-        customComparisonElement.setAttribute("disabled", "disabled");
-        compareButton.innerText = 'Compare date range';
-        patternCheckbox.style.display = 'inline-block';
+    if (lastCheckedComparison === 'year') {
+        // Deselect if clicking the same option
+        yearSelectionElement.checked = false;
+        lastCheckedComparison = null;
+        updateComparisonUI(null);
     } else {
-        patternCheckbox.style.display = 'none';
+        lastCheckedComparison = 'year';
+        updateComparisonUI('year');
     }
 });
 
@@ -377,6 +405,12 @@ const lastMonthYoY = document.getElementById("last-month-compared-to-last-year-b
 lastMonth.addEventListener("click", function() {
     const startDateFormat = formatDate(new Date(aMaandStart));
     const endDateFormat = formatDate(new Date(aMaandEnd));
+    // Clear any comparison selection for this quick selection
+    document.getElementById('previous').checked = false;
+    document.getElementById('year').checked = false;
+    document.getElementById('custom').checked = false;
+    lastCheckedComparison = null;
+    updateComparisonUI(null);
     addParametersToUrl({start_date: startDateFormat, end_date: endDateFormat});
 });
 
@@ -559,6 +593,7 @@ function customSelection() {
         addParametersToUrl({start_date: startDateFormat, end_date: endDateFormat, compare_start_date: previousStartDateFormat, compare_end_date: previousEndDateFormat});
         patternCheckbox.style.display = 'none';
     } else {
+        // No comparison selected - just apply the date range
         addParametersToUrl({start_date: startDateFormat, end_date: endDateFormat})
     }
 }
@@ -957,22 +992,17 @@ async function initializeSavedSettings() {
         const result = await chrome.storage.session.get(['comparisonMethod', 'presetChoice', 'patternChecked']);
         
         // Restore comparison method selection
-        if (result.comparisonMethod) {
+        if (result.comparisonMethod && result.comparisonMethod !== 'none') {
             const radioButton = document.getElementById(result.comparisonMethod);
             if (radioButton) {
                 radioButton.checked = true;
-                
-                // Trigger the appropriate UI updates
-                if (result.comparisonMethod === 'custom') {
-                    document.getElementById('datepickercomparison').removeAttribute('disabled');
-                    compareButton.innerText = 'Compare date range';
-                    patternCheckbox.style.display = 'none';
-                } else if (result.comparisonMethod === 'previous' || result.comparisonMethod === 'year') {
-                    document.getElementById('datepickercomparison').setAttribute('disabled', 'disabled');
-                    compareButton.innerText = 'Compare date range';
-                    patternCheckbox.style.display = 'inline-block';
-                }
+                lastCheckedComparison = result.comparisonMethod;
+                updateComparisonUI(result.comparisonMethod);
             }
+        } else {
+            // If no comparison method is saved or it's 'none', default to no selection
+            lastCheckedComparison = null;
+            updateComparisonUI(null);
         }
         
         // Restore pattern checkbox state
@@ -991,7 +1021,6 @@ async function initializeSavedSettings() {
 }
 
 // Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
     // Small delay to ensure all elements are ready
     setTimeout(initializeSavedSettings, 100);
 });
