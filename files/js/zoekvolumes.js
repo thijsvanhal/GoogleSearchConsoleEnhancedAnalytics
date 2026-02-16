@@ -204,7 +204,8 @@ function isValidKeywordPhrase(phrase) {
         return false;
     }
 
-    const replacementCharRegex = /\uFFFD/;
+    // Exclude "replacement character" (U+FFFD) and "object replacement character" (U+FFFC, shown as ￼)
+    const replacementCharRegex = /[\uFFFD\uFFFC]/;
     if (replacementCharRegex.test(modifiedPhrase)) {
         return false;
     }
